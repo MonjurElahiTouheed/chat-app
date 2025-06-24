@@ -1,32 +1,70 @@
 import { useState } from 'react';
 import registration from './assets/login-image.png';
+import { FaEyeSlash, FaEye} from "react-icons/fa";
+
 function App() {
   const [email, setEmail] = useState('');
   const [fullName, setFullName] = useState('');
   const [password, setPassword] = useState('');
+  const [emailErr, setEmailErr] = useState('');
+  const [fullNameErr, setFullNameErr] = useState('');
+  const [passwordErr, setPasswordErr] = useState('');
+  const [show, setShow] = useState(false);
+
   const handleEmail = e => {
     setEmail(e.target.value);
+    setEmailErr('');
   }
   const handleFullName = e => {
     setFullName(e.target.value);
+    setFullNameErr('');
   }
 
   const handlePassword = e => {
     setPassword(e.target.value);
+    setPasswordErr('')
   }
 
   const handleRegistration = () => {
+
     console.log(email, fullName, password);
 
+    // console.log(email);
+    // console.log(fullName);
+    // console.log(password);
+
     if(!email) {
-      console.log('bhai tui email de');
+      setEmailErr('bhai tui email de');
+    }
+    else{
+      if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){
+        setEmailErr('আরে ভাই ইমেইল টা ঠিক কইরা লেখ')
+      }
     }
     if(!fullName) {
-      console.log('bhai tui fullName de');
+      setFullNameErr('bhai tui fullName de');
     }
     if(!password){
-      console.log('bhai tui password de')
+      setPasswordErr('bhai tui password de')
     }
+    /* else if(!/(?=.*[a-z])/.test(password)){
+      setPasswordErr('Enter at least one small character')
+    }
+    else if(!/(?=.*[A-Z])/.test(password)){
+      setPasswordErr('Enter at least one big character')
+    }
+    else if(!/(?=.*[0-9])/.test(password)){
+      setPasswordErr('Enter at least one number')
+    }
+    else if(!/(?=.*[!@#$%^&*])/.test(password)){
+      setPasswordErr('Enter at least one special character')
+    }
+    else if(!/(?=.{8,})/.test(password)){
+      setPasswordErr('Your password must be eight characters long')
+    } */
+   if (email && fullName && password) {
+        console.log('Registration done')
+   }
   }
   return (
     <>
@@ -38,26 +76,38 @@ function App() {
           <p className='font-secondary text-[20px] text-black/50 mt-[13px]'>Free register and you can enjoy it</p>
 
           <div className="mt-[60px]">
-            <div className='relative'>
-              <input onChange={handleEmail} type="text" className='py-[26px] pl-[45px] border-2 border-black/30 rounded-[8.6px] focus:outline-0 w-[368px]' 
+            <div className='relative  w-[368px]'>
+              <input onChange={handleEmail} type="text" className='py-[20px] pl-[45px] border-2 border-black/30 rounded-[8.6px] focus:outline-0 w-full' 
               placeholder='Enter your email address'
               />
+              <p className='bg-red-500 text-white font-semibold rounded px-4 mt-1'>{emailErr}</p>
               <label className='absolute top-[-12px] left-[34px] bg-white px-[12px] font-secondary font-semibold text-secondary tracking-[4px]'>
                 Email Address
               </label>
             </div>
-            <div className='relative my-[30px]'>
-              <input onChange={handleFullName} type="text" className='py-[26px] pl-[45px] border-2 border-black/30 rounded-[8.6px] focus:outline-0 w-[368px]' 
+            <div className='relative my-[30px] w-[368px]'>
+              <input onChange={handleFullName} type="text" className='py-[20px] pl-[45px] border-2 border-black/30 rounded-[8.6px] focus:outline-0 w-full' 
               placeholder='Enter your Full Name'
               />
+              <p className='bg-red-500 text-white font-semibold rounded px-4 mt-1'>{fullNameErr}</p>
               <label className='absolute top-[-12px] left-[34px] bg-white px-[12px] font-secondary font-semibold text-secondary tracking-[4px]'>
                 Full name
               </label>
             </div>
-            <div className='relative'>
-              <input onChange={handlePassword} type="text" className='py-[26px] pl-[45px] border-2 border-black/30 rounded-[8.6px] focus:outline-0 w-[368px]'
+            <div className='relative w-[368px]'>
+              <input 
+              onChange={handlePassword} 
+              type={show ? "text" : 'password'} className='py-[20px] px-[50px] border-2 border-black/30 rounded-[8.6px] focus:outline-0 w-full'
               placeholder='Password'
               />
+              {
+                show ? <FaEye size={18} onClick={() => setShow(!show)} className='absolute top-5.5 right-6 cursor-pointer'/> :
+                <FaEyeSlash size={18} onClick={() => setShow(!show)} className='absolute top-5.5 right-6 cursor-pointer'/>
+              }
+              
+              
+
+              <p className='bg-red-500 text-white font-semibold rounded px-4 mt-1'>{passwordErr}</p>
               <label className='absolute top-[-12px] left-[34px] bg-white px-[12px] font-secondary font-semibold text-secondary tracking-[4px]'>
                 Password
               </label>
