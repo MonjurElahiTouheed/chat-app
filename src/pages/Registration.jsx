@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import registration from '../assets/registration.png';
 import { FaEyeSlash, FaEye } from "react-icons/fa";
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { toast, ToastContainer } from 'react-toastify';
 
 const Registration = () => {
     const auth = getAuth();
+    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [fullName, setFullName] = useState('');
     const [password, setPassword] = useState('');
@@ -73,23 +75,41 @@ const Registration = () => {
             setFullName('');
             setPassword(''); */
             createUserWithEmailAndPassword(auth, email, password)
-            .then(() => {
-                console.log('Registration successfully done')
-            })
-            .catch((error) => {
-                console.log(error);
-                const err = error.message;
-                if(err.includes('auth/email-already-in-use')){
-                    setEmailErr('This Email already in exists');
-                }
-                if(err.includes('auth/weak-password')){
-                    setPasswordErr('Password should be at least 6 characters');
-                }
-            })
+                .then(() => {
+                    toast.success('Registration successfully done');
+                    setTimeout(() => {
+                        navigate('/login');
+                    }, 2000)
+                    setEmail('');
+                    setFullName('');
+                    setPassword('');
+                })
+                .catch((error) => {
+                    console.log(error);
+                    const err = error.message;
+                    if (err.includes('auth/email-already-in-use')) {
+                        setEmailErr('This Email already in exists');
+                    }
+                    if (err.includes('auth/weak-password')) {
+                        setPasswordErr('Password should be at least 6 characters');
+                    }
+                })
         }
     }
     return (
         <div className="flex">
+            <ToastContainer
+                position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick={false}
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+            />
             <div className="w-[60%] pt-[225px] pl-[190px]">
                 <h2 className="font-secondary font-bold text-secondary text-[34px]">
                     Get started with easily register
@@ -99,9 +119,9 @@ const Registration = () => {
                 <div className="mt-[60px]">
                     <div className='relative  w-[368px]'>
                         <input
-                         onChange={handleEmail}
-                         value={email}
-                         type="text" className='py-[20px] pl-[45px] border-2 border-black/30 rounded-[8.6px] focus:outline-0 w-full'
+                            onChange={handleEmail}
+                            value={email}
+                            type="text" className='py-[20px] pl-[45px] border-2 border-black/30 rounded-[8.6px] focus:outline-0 w-full'
                             placeholder='Enter your email address'
                         />
                         <p className='bg-red-500 text-white font-semibold rounded px-4 mt-1'>{emailErr}</p>
@@ -144,7 +164,7 @@ const Registration = () => {
                         Sign Up
                     </button>
                     <p className="text-center text-primary text-[13px] mt-[30px]">Already have an account ? {" "}
-                       <Link to='/login' className='text-[#EA6C00]'>Sign In</Link>
+                        <Link to='/login' className='text-[#EA6C00]'>Sign In</Link>
                     </p>
                 </div>
             </div>
