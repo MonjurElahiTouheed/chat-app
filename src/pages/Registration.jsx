@@ -4,6 +4,7 @@ import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { Link, useNavigate } from 'react-router';
 import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { toast, ToastContainer } from 'react-toastify';
+import { PacmanLoader } from 'react-spinners';
 
 const Registration = () => {
     const auth = getAuth();
@@ -15,6 +16,7 @@ const Registration = () => {
     const [fullNameErr, setFullNameErr] = useState('');
     const [passwordErr, setPasswordErr] = useState('');
     const [show, setShow] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const handleEmail = e => {
         setEmail(e.target.value);
@@ -79,6 +81,7 @@ const Registration = () => {
                     sendEmailVerification(auth.currentUser);
                     console.log('user', user);
                     toast.success('Registration successfully done, Please verify your email');
+                    setLoading(true);
                     setTimeout(() => {
                         navigate('/login');
                     }, 2000)
@@ -162,9 +165,21 @@ const Registration = () => {
                     </div>
                 </div>
                 <div className='w-[368px] mt-[30px]'>
-                    <button onClick={handleRegistration} className="w-full font-secondary text-white py-5 bg-primary rounded-[86px]">
+                    {
+                        loading
+                            ?
+                            <div className="flex justify-center">
+                                <PacmanLoader color='#1e1e1e' />
+                            </div>
+                            :
+                            <button onClick={handleRegistration} className="w-full font-secondary text-white py-5 bg-primary rounded-[86px]">
+                                Sign Up
+                            </button>
+                    }
+                    {/* <button onClick={handleRegistration} className="w-full font-secondary text-white py-5 bg-primary rounded-[86px]">
                         Sign Up
-                    </button>
+                    </button> */}
+
                     <p className="text-center text-primary text-[13px] mt-[30px]">Already have an account ? {" "}
                         <Link to='/login' className='text-[#EA6C00]'>Sign In</Link>
                     </p>
