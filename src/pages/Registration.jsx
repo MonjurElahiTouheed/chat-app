@@ -2,9 +2,10 @@ import { useState } from 'react';
 import registration from '../assets/registration.png';
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { Link } from 'react-router';
-
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 const Registration = () => {
+    const auth = getAuth();
     const [email, setEmail] = useState('');
     const [fullName, setFullName] = useState('');
     const [password, setPassword] = useState('');
@@ -64,11 +65,20 @@ const Registration = () => {
         else if(!/(?=.{8,})/.test(password)){
           setPasswordErr('Your password must be eight characters long')
         } */
-        if (email && fullName && password) {
-            console.log('Registration done');
+        if (email && fullName && password &&
+            /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)
+        ) {
+            /* console.log('Registration done');
             setEmail('');
             setFullName('');
-            setPassword('');
+            setPassword(''); */
+            createUserWithEmailAndPassword(auth, email, password)
+            .then(() => {
+                console.log('Registration successfully done')
+            })
+            .catch((error) => {
+                console.log(error)
+            })
         }
     }
     return (
