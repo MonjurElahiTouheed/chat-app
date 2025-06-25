@@ -77,7 +77,14 @@ const Registration = () => {
                 console.log('Registration successfully done')
             })
             .catch((error) => {
-                console.log(error)
+                console.log(error);
+                const err = error.message;
+                if(err.includes('auth/email-already-in-use')){
+                    setEmailErr('This Email already in exists');
+                }
+                if(err.includes('auth/weak-password')){
+                    setPasswordErr('Password should be at least 6 characters');
+                }
             })
         }
     }
