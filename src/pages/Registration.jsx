@@ -2,7 +2,7 @@ import { useState } from 'react';
 import registration from '../assets/registration.png';
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { Link, useNavigate } from 'react-router';
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { toast, ToastContainer } from 'react-toastify';
 
 const Registration = () => {
@@ -75,8 +75,10 @@ const Registration = () => {
             setFullName('');
             setPassword(''); */
             createUserWithEmailAndPassword(auth, email, password)
-                .then(() => {
-                    toast.success('Registration successfully done');
+                .then((user) => {
+                    sendEmailVerification(auth.currentUser);
+                    console.log('user', user);
+                    toast.success('Registration successfully done, Please verify your email');
                     setTimeout(() => {
                         navigate('/login');
                     }, 2000)
@@ -121,7 +123,7 @@ const Registration = () => {
                         <input
                             onChange={handleEmail}
                             value={email}
-                            type="text" className='py-[20px] pl-[45px] border-2 border-black/30 rounded-[8.6px] focus:outline-0 w-full'
+                            type="email" className='py-[20px] pl-[45px] border-2 border-black/30 rounded-[8.6px] focus:outline-0 w-full'
                             placeholder='Enter your email address'
                         />
                         <p className='bg-red-500 text-white font-semibold rounded px-4 mt-1'>{emailErr}</p>

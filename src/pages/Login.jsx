@@ -89,7 +89,7 @@ const Login = () => {
                         <input
                          onChange={handleEmail}
                          value={email}
-                         type="text" className='py-[20px] pl-[45px] border-b-2 border-black/30 rounded-[8.6px] focus:outline-0 w-full'
+                         type="email" className='py-[20px] pl-[45px] border-b-2 border-black/30 rounded-[8.6px] focus:outline-0 w-full'
                             placeholder='Enter your email address'
                         />
                         <p className='bg-red-500 text-white font-semibold rounded px-4 mt-1'>{emailErr}</p>
