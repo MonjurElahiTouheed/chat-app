@@ -83,6 +83,9 @@ const Registration = () => {
                     toast.success('Registration successfully done, Please verify your email');
                     setLoading(true);
                     setTimeout(() => {
+                        setLoading(false);
+                    }, 1500)
+                    setTimeout(() => {
                         navigate('/login');
                     }, 2000)
                     setEmail('');
