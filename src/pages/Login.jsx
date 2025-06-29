@@ -3,12 +3,13 @@ import login from '../assets/login.jpg';
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import google from '../assets/google.png';
 import { Link } from 'react-router';
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { toast, ToastContainer } from 'react-toastify';
 
 
 const Login = () => {
     const auth = getAuth();
+    const provider = new GoogleAuthProvider();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [emailErr, setEmailErr] = useState('');
@@ -79,6 +80,21 @@ const Login = () => {
 
         }
     }
+
+    const handleGoogleAuth = () => {
+        const auth = getAuth();
+        signInWithPopup(auth, provider)
+            .then((user) => {
+                console.log(user);
+                console.log('google auth success')
+                // ...
+            }).catch((error) => {
+                // Handle Errors here.
+                const errorCode = error.code;
+                console.log(errorCode)
+                // ...
+            });
+    }
     return (
         <div className="flex">
             <ToastContainer
@@ -99,7 +115,7 @@ const Login = () => {
                 </h2>
                 <p className='font-secondary text-[20px] text-black/50 mt-[13px]'>Free register and you can enjoy it</p>
 
-                <div className='flex gap-2.5 pl-[29px] pt-6 pb-[22px] border-1 border-[rgb(3,1,76)] rounded-[9px] mt-[29px] w-[221px]'>
+                <div onClick={handleGoogleAuth} className='flex gap-2.5 pl-[29px] pt-6 pb-[22px] border-1 border-[rgb(3,1,76)] rounded-[9px] mt-[29px] w-[221px]'>
                     <img src={google} alt="" />
                     <p className='font-sans text-[#03014C] font-semibold text-sm'>Login with Google</p>
                 </div>
