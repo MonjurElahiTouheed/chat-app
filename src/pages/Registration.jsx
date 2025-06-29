@@ -76,31 +76,32 @@ const Registration = () => {
             setEmail('');
             setFullName('');
             setPassword(''); */
+            setLoading(true);
             createUserWithEmailAndPassword(auth, email, password)
                 .then((user) => {
                     sendEmailVerification(auth.currentUser);
                     console.log('user', user);
                     toast.success('Registration successfully done, Please verify your email');
-                    setLoading(true);
-                    setTimeout(() => {
+                    
                         setLoading(false);
-                    }, 1500)
-                    setTimeout(() => {
-                        navigate('/login');
-                    }, 2000)
-                    setEmail('');
-                    setFullName('');
-                    setPassword('');
-                })
-                .catch((error) => {
-                    console.log(error);
-                    const err = error.message;
-                    if (err.includes('auth/email-already-in-use')) {
-                        setEmailErr('This Email already in exists');
-                    }
-                    if (err.includes('auth/weak-password')) {
-                        setPasswordErr('Password should be at least 6 characters');
-                    }
+                        
+                        setTimeout(() => {
+                            navigate('/login');
+                        }, 2000)
+                        setEmail('');
+                        setFullName('');
+                        setPassword('');
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        const err = error.message;
+                        if (err.includes('auth/email-already-in-use')) {
+                            setEmailErr('This Email already in exists');
+                        }
+                        if (err.includes('auth/weak-password')) {
+                            setPasswordErr('Password should be at least 6 characters');
+                        }
+                        setLoading(false);
                 })
         }
     }

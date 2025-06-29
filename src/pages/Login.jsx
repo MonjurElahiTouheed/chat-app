@@ -3,13 +3,15 @@ import login from '../assets/login.jpg';
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import google from '../assets/google.png';
 import { Link } from 'react-router';
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { toast, ToastContainer } from 'react-toastify';
+
 
 const Login = () => {
+    const auth = getAuth();
     const [email, setEmail] = useState('');
-    const [fullName, setFullName] = useState('');
     const [password, setPassword] = useState('');
     const [emailErr, setEmailErr] = useState('');
-    const [fullNameErr, setFullNameErr] = useState('');
     const [passwordErr, setPasswordErr] = useState('');
     const [show, setShow] = useState(false);
 
@@ -17,22 +19,17 @@ const Login = () => {
         setEmail(e.target.value);
         setEmailErr('');
     }
-    const handleFullName = e => {
-        setFullName(e.target.value);
-        setFullNameErr('');
-    }
 
     const handlePassword = e => {
         setPassword(e.target.value);
         setPasswordErr('')
     }
 
-    const handleRegistration = () => {
+    const handleLogin = () => {
 
-        console.log(email, fullName, password);
+        // console.log(email, password);
 
         // console.log(email);
-        // console.log(fullName);
         // console.log(password);
 
         if (!email) {
@@ -42,9 +39,6 @@ const Login = () => {
             if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
                 setEmailErr('আরে ভাই ইমেইল টা ঠিক কইরা লেখ')
             }
-        }
-        if (!fullName) {
-            setFullNameErr('bhai tui fullName de');
         }
         if (!password) {
             setPasswordErr('bhai tui password de')
@@ -64,15 +58,41 @@ const Login = () => {
         else if(!/(?=.{8,})/.test(password)){
           setPasswordErr('Your password must be eight characters long')
         } */
-        if (email && fullName && password) {
-            console.log('Registration done');
-            setEmail('');
-            setFullName('');
-            setPassword('');
+        if (email && password && /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+            signInWithEmailAndPassword(auth, email, password)
+                .then((user) => {
+                    console.log(user);
+                    console.log('login done');
+                    setEmail('');
+                    setPassword('');
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    // const errorMessage = error.message;
+                    // console.log(error)
+                    console.log(errorCode)
+                    // console.log(errorMessage)
+                    if (errorCode.includes('auth/invalid-credential')) {
+                        toast.error('please provide correct email & password')
+                    }
+                });
+
         }
     }
     return (
         <div className="flex">
+            <ToastContainer
+                position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick={false}
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+            />
             <div className="w-[60%] pt-[225px] pl-[190px]">
                 <h2 className="font-secondary font-bold text-secondary text-[34px]">
                     Get started with easily register
@@ -87,9 +107,9 @@ const Login = () => {
                 <div className="mt-[60px]">
                     <div className='relative w-[368px]'>
                         <input
-                         onChange={handleEmail}
-                         value={email}
-                         type="email" className='py-[20px] pl-[45px] border-b-2 border-black/30 rounded-[8.6px] focus:outline-0 w-full'
+                            onChange={handleEmail}
+                            value={email}
+                            type="email" className='py-[20px] pl-[45px] border-b-2 border-black/30 rounded-[8.6px] focus:outline-0 w-full'
                             placeholder='Enter your email address'
                         />
                         <p className='bg-red-500 text-white font-semibold rounded px-4 mt-1'>{emailErr}</p>
@@ -116,12 +136,16 @@ const Login = () => {
                     </div>
                 </div>
                 <div className='w-[368px] mt-[30px]'>
-                    <button onClick={handleRegistration} className="w-full font-secondary text-white py-5 bg-primary rounded-[86px]">
+                    <button onClick={handleLogin} className="w-full font-secondary text-white py-5 bg-primary rounded-[86px]">
                         Login to Continue
                     </button>
-                    <p className="text-center text-primary text-[13px] mt-[30px]">Don't have an account ? {" "}
-                       <Link to='/registration' className='text-[#EA6C00]'>Sign up</Link>
+                    <p className="text-center text-primary text-[13px] mt-[30px] font-sans">Don't have an account ? {" "}
+                        <Link to='/registration' className='text-[#EA6C00]'>Sign up</Link>
                     </p>
+                    <div className="text-center mt-[18px]">
+
+                        <Link to='/forgottenpassword' className="text-center text-[13px] text-red-400 font-sans font-bold">Forgotten password ?</Link>
+                    </div>
                 </div>
             </div>
             <div className='w-[40%]'>
