@@ -2,7 +2,7 @@ import { useState } from 'react';
 import login from '../assets/login.jpg';
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import google from '../assets/google.png';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { toast, ToastContainer } from 'react-toastify';
 
@@ -10,6 +10,7 @@ import { toast, ToastContainer } from 'react-toastify';
 const Login = () => {
     const auth = getAuth();
     const provider = new GoogleAuthProvider();
+    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [emailErr, setEmailErr] = useState('');
@@ -66,6 +67,9 @@ const Login = () => {
                     console.log('login done');
                     setEmail('');
                     setPassword('');
+                    setTimeout(() => {
+                        navigate('/home');
+                    }, 2000)
                 })
                 .catch((error) => {
                     const errorCode = error.code;
@@ -88,6 +92,10 @@ const Login = () => {
                 console.log(user);
                 console.log('google auth success')
                 // ...
+
+                setTimeout(() => {
+                    navigate('/home');
+                }, 2000)
             }).catch((error) => {
                 // Handle Errors here.
                 const errorCode = error.code;
