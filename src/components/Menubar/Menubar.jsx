@@ -7,11 +7,11 @@ import { FiLogOut } from "react-icons/fi";
 
 const Menubar = () => {
     return (
-        <div className="bg-primary pt-[38px] pb-[47px] pl-[43px w-[186px] rounded-[20px]">
-            <div className='px-[43px]'>
-                <img src={user_profile} alt="" />
+        <div className="bg-primary pt-[38px] pb-[47px] w-[186px] rounded-[20px]">
+            <div>
+                <img className='mx-auto' src={user_profile} alt="" />
             </div>
-            <div className='mt-[98px] flex flex-col gap-[60px] pl-[25px]'>
+            {/* <div className='mt-[98px] flex flex-col gap-[60px] pl-[25px]'>
                 <NavLink
                     to="/home"
                     className={({ isActive, isPending }) =>
@@ -39,7 +39,36 @@ const Menubar = () => {
                     <GoGear size={45} />
                     <div className="rounded-l-[25px] absolute w-[10px] h-full bg-primary top-0 right-0 shadow-[-2px_0_4px_rgba(0,0,0,0.25)]"></div>
                 </NavLink>
+            </div> */}
+            {/* <div className='mt-[98px] flex flex-col gap-[60px] pl-[25px]'> */}
+            <div className="mt-[78px]">
+
+                <NavLink
+                    to="/home"
+                    className={({ isActive, isPending }) =>
+                        isPending ? "pending" : isActive ? "text-black relative after:content-[''] after:absolute after:bg-white after:w-full after:h-full after:rounded-2xl after:z-[-1] z-[1] after:top-0 after:left-[25px] py-[20px] block before:absolute before:h-full before:w-2 before:top-0 before:right-0 before:rounded-l-2xl before:bg-primary before:shadow-[-2px_0_4px_rgba(0,0,0,0.25)]" : "text-white"
+                    }
+                >
+                    <SlHome size={45} className='mx-auto'/>
+                </NavLink>
             </div>
+                <NavLink
+                    to="/chat"
+                    className={({ isActive, isPending }) =>
+                        isPending ? "pending" : isActive ? "text-black relative after:content-[''] after:absolute after:bg-white after:w-full after:h-full after:rounded-2xl after:z-[-1] z-[1] after:top-0 after:left-[12px] py-[20px]" : "text-white"
+                    }
+                >
+                    <AiFillMessage size={45} />
+                </NavLink>
+                <NavLink
+                    to="/settings"
+                    className={({ isActive, isPending }) =>
+                        isPending ? "pending" : isActive ? "text-black relative after:content-[''] after:absolute after:bg-white after:w-full after:h-full after:rounded-2xl after:z-[-1] z-[1] after:top-0 after:left-[12px] py-[20px]" : "text-white"
+                    }
+                >
+                    <GoGear size={45} />
+                </NavLink>
+            {/* </div> */}
                 <Link to='/logi' className='pl-[45px pr-[70px mt-[140px] flex justify-center'>
                     <FiLogOut size={45} color='white' className='pl-[45px pt- pb-[26px text-white' />
                 </Link>

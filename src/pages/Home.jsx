@@ -3,6 +3,9 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import Groups from "../components/Groups/Groups";
 import Friends from "../components/Friends/Friends";
 import Users from "../components/Users/Users";
+import FriendRequest from "../components/FriendRequest/FriendRequest";
+import MyGroups from "../components/MyGroups/MyGroups";
+import BlockedUsers from "../components/BlockedUsers/BlockedUsers";
 
 const groups = [
     {
@@ -24,7 +27,7 @@ const groups = [
 
 const Home = () => {
     return (
-        <div className="flex justify-between w-[88%]">
+        <div className="flex justify-between w-[88%] flex-wrap">
             {/* <div className="pl-8 pr-[23px] py-[35px]">
                 <Menubar></Menubar>
                 <Outlet></Outlet>
@@ -39,6 +42,9 @@ const Home = () => {
             </div>
             <Friends></Friends>
             <Users></Users>
+            <FriendRequest></FriendRequest>
+            <MyGroups></MyGroups>
+            <BlockedUsers></BlockedUsers>
         </div>
     );
 };

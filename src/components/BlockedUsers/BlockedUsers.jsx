@@ -6,8 +6,7 @@ import friend3 from '../../assets/home/kiren.png';
 import friend4 from '../../assets/home/tajeshwani.png';
 import Button from "../../Layout/Button";
 
-
-const Users = () => {
+const BlockedUsers = () => {
     const users = [
             {
                 image: friend1,
@@ -64,4 +63,4 @@ const Users = () => {
     );
 };
 
-export default Users;
+export default BlockedUsers;

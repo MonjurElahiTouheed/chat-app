@@ -33,7 +33,7 @@ const Friends = () => {
         }
     ];
     return (
-        <div className='pl-5 pr-[22px] pt-[17px] pb-[21px] rounded-[20px] shadow-[0_4px_4px_rgba(0,0,0,0.25)]  w-[30%]'>
+        <div className='pl-5 pr-[22px] pt-[17px] pb-[21px] rounded-[20px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] w-[35%]'>
             <Flex>
                 <h4 className="font-primary font-semibold text-xl">Friends</h4>
                 <BsThreeDotsVertical size={19} className="" />

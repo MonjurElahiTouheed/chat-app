@@ -6,34 +6,33 @@ import friend3 from '../../assets/home/kiren.png';
 import friend4 from '../../assets/home/tajeshwani.png';
 import Button from "../../Layout/Button";
 
-
-const Users = () => {
+const MyGroups = () => {
     const users = [
-            {
-                image: friend1,
-                user_name: 'Raghav',
-                last_message: 'Dinner?',
-                last_replay_time: 'Today, 8:56pm'
-            },
-            {
-                image: friend2,
-                user_name: 'Swathi',
-                last_message: 'Sure!',
-                last_replay_time: 'Today, 2:31pm'
-            },
-            {
-                image: friend3,
-                user_name: 'Kiran',
-                last_message: 'Hi.....',
-                last_replay_time: 'Yesterday, 6:22pm'
-            },
-            {
-                image: friend4,
-                user_name: 'Tejeshwini C',
-                last_message: 'I will call him today.',
-                last_replay_time: 'Today, 12:22pm'
-            }
-        ];
+                {
+                    image: friend1,
+                    user_name: 'Raghav',
+                    last_message: 'Dinner?',
+                    last_replay_time: 'Today, 8:56pm'
+                },
+                {
+                    image: friend2,
+                    user_name: 'Swathi',
+                    last_message: 'Sure!',
+                    last_replay_time: 'Today, 2:31pm'
+                },
+                {
+                    image: friend3,
+                    user_name: 'Kiran',
+                    last_message: 'Hi.....',
+                    last_replay_time: 'Yesterday, 6:22pm'
+                },
+                {
+                    image: friend4,
+                    user_name: 'Tejeshwini C',
+                    last_message: 'I will call him today.',
+                    last_replay_time: 'Today, 12:22pm'
+                }
+            ];
     return (
         <div className='pl-5 pr-[22px] pt-[17px] pb-[21px] rounded-[20px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] w-[35%]'>
             <Flex>
@@ -64,4 +63,4 @@ const Users = () => {
     );
 };
 
-export default Users;
+export default MyGroups;
