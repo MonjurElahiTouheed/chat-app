@@ -3,7 +3,7 @@ import { SlHome } from "react-icons/sl";
 import { AiFillMessage } from "react-icons/ai";
 import { GoGear } from "react-icons/go";
 import { Link, NavLink } from 'react-router';
-import { FiLogOut } from "react-icons/fi";
+import { ImExit } from "react-icons/im";
 
 const Menubar = () => {
     return (
@@ -46,31 +46,36 @@ const Menubar = () => {
                 <NavLink
                     to="/home"
                     className={({ isActive, isPending }) =>
-                        isPending ? "pending" : isActive ? "text-black relative after:content-[''] after:absolute after:bg-white after:w-full after:h-full after:rounded-2xl after:z-[-1] z-[1] after:top-0 after:left-[25px] py-[20px] block before:absolute before:h-full before:w-2 before:top-0 before:right-0 before:rounded-l-2xl before:bg-primary before:shadow-[-2px_0_4px_rgba(0,0,0,0.25)]" : "text-white"
+                        isPending ? "pending" : isActive ? "text-black relative after:content-[''] after:absolute after:bg-white after:w-full after:h-full after:rounded-2xl after:z-[-1] z-[1] after:top-0 after:left-[25px] py-[20px] block before:absolute before:h-full before:w-2 before:top-0 before:right-0 before:rounded-l-2xl before:bg-primary before:shadow-[-2px_0_4px_rgba(0,0,0,0.25)]" : "text-white py-[20px] block"
                     }
                 >
                     <SlHome size={45} className='mx-auto'/>
                 </NavLink>
             </div>
+            <div className="mt-[60px]">
                 <NavLink
                     to="/chat"
                     className={({ isActive, isPending }) =>
-                        isPending ? "pending" : isActive ? "text-black relative after:content-[''] after:absolute after:bg-white after:w-full after:h-full after:rounded-2xl after:z-[-1] z-[1] after:top-0 after:left-[12px] py-[20px]" : "text-white"
+                        isPending ? "pending" : isActive ? "text-black relative after:content-[''] after:absolute after:bg-white after:w-full after:h-full after:rounded-2xl after:z-[-1] z-[1] after:top-0 after:left-[25px] py-[20px] block before:absolute before:h-full before:w-2 before:top-0 before:right-0 before:rounded-l-2xl before:bg-primary before:shadow-[-2px_0_4px_rgba(0,0,0,0.25)]" : "text-white py-[20px] block"
                     }
                 >
-                    <AiFillMessage size={45} />
+                    <AiFillMessage size={45} className='mx-auto'/>
                 </NavLink>
+            </div>
+            <div className="mt-[60px]">
+
                 <NavLink
                     to="/settings"
                     className={({ isActive, isPending }) =>
-                        isPending ? "pending" : isActive ? "text-black relative after:content-[''] after:absolute after:bg-white after:w-full after:h-full after:rounded-2xl after:z-[-1] z-[1] after:top-0 after:left-[12px] py-[20px]" : "text-white"
+                        isPending ? "pending" : isActive ? "text-black relative after:content-[''] after:absolute after:bg-white after:w-full after:h-full after:rounded-2xl after:z-[-1] z-[1] after:top-0 after:left-[25px] py-[20px] block before:absolute before:h-full before:w-2 before:top-0 before:right-0 before:rounded-l-2xl before:bg-primary before:shadow-[-2px_0_4px_rgba(0,0,0,0.25)]" : "text-white py-[20px] block"
                     }
                 >
-                    <GoGear size={45} />
+                    <GoGear size={45} className='mx-auto'/>
                 </NavLink>
+            </div>
             {/* </div> */}
-                <Link to='/logi' className='pl-[45px pr-[70px mt-[140px] flex justify-center'>
-                    <FiLogOut size={45} color='white' className='pl-[45px pt- pb-[26px text-white' />
+                <Link to='/logi' className='pl-[45px pr-[70px mt-[193px] flex justify-center'>
+                    <ImExit size={45} color='white' className='pl-[45px pt- pb-[26px text-white' />
                 </Link>
         </div>
     );
