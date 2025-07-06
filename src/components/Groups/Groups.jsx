@@ -34,13 +34,13 @@ const Groups = () => {
         }
     ];
     return (
-        <div className='pl-5 pr-[22px] pt-[17px] pb-[5px] rounded-[20px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] mt-[43px]'>
+        <div className='pl-5 pr-[22px] pt-[17px] pb-[10px] rounded-[20px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] mt-[43px]'>
             <Flex>
                 <h4 className="font-primary font-semibold text-xl">Groups List</h4>
                 <BsThreeDotsVertical size={19} className="" />
 
             </Flex>
-            <div className="pr-[30px] mt-1.5 mr-0.5 h-[297px] overflow-y-auto">
+            <div className="pr-[30px] mt-1.5 mr-0.5 h-[292px] overflow-y-auto">
                 {
                     groups.map((group, index) =>
                         <Flex className={`pt-4 ${index === groups.length - 1 ? '' : 'border-b-2 border-black/25 pb-[13px]'}`}>

@@ -6,8 +6,44 @@ import friend3 from '../../assets/home/kiren.png';
 import friend4 from '../../assets/home/tajeshwani.png';
 import friend5 from '../../assets/home/marvin.png';
 
-const Friends = () => {
+const Friends = ({className, height_value}) => {
     const users = [
+        {
+            image: friend1,
+            user_name: 'Raghav',
+            last_message: 'Dinner?',
+            last_replay_time: 'Today, 8:56pm'
+        },
+        {
+            image: friend5,
+            user_name: 'Swathi',
+            last_message: 'Sure!',
+            last_replay_time: 'Today, 2:31pm'
+        },
+        {
+            image: friend3,
+            user_name: 'Kiran',
+            last_message: 'Hi.....',
+            last_replay_time: 'Yesterday, 6:22pm'
+        },
+        {
+            image: friend1,
+            user_name: 'Tejeshwini C',
+            last_message: 'I will call him today.',
+            last_replay_time: 'Today, 12:22pm'
+        },
+        {
+            image: friend5,
+            user_name: 'Marvin McKinney',
+            last_message: 'I will call him today.',
+            last_replay_time: 'Today, 12:22pm'
+        },
+        {
+            image: friend3,
+            user_name: 'Marvin McKinney',
+            last_message: 'I will call him today.',
+            last_replay_time: 'Today, 12:22pm'
+        },
         {
             image: friend1,
             user_name: 'Raghav',
@@ -46,13 +82,13 @@ const Friends = () => {
         }
     ];
     return (
-        <div className='pl-5 pr-[22px] pt-[17px] pb-[21px rounded-[20px] shadow-[0_4px_4px_rgba(0,0,0,0.25)]'>
+        <div className={`pl-5 pr-[22px] pt-[17px] rounded-[20px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] ${className}`}>
             <Flex>
                 <h4 className="font-primary font-semibold text-xl">Friends</h4>
                 <BsThreeDotsVertical size={19} className="" />
 
             </Flex>
-            <div className="pr-[10px] mt-1.5 mr-0.5 h-[90%] overflow-y-auto">
+            <div className={`pr-[10px] mt-1.5 mr-0.5 overflow-y-auto ${height_value}`}>
                 {
                     users.map((user, index) =>
                         <Flex className={`pt-4 ${index === users.length-1 ? '' : 'border-b-2 border-black/25 pb-[13px]'}`}>
