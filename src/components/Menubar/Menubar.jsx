@@ -2,10 +2,22 @@ import user_profile from '../../assets/home/user_profile.png';
 import { SlHome } from "react-icons/sl";
 import { AiFillMessage } from "react-icons/ai";
 import { GoGear } from "react-icons/go";
-import { Link, NavLink } from 'react-router';
+import { Link, NavLink, useNavigate } from 'react-router';
 import { ImExit } from "react-icons/im";
+import { getAuth, signOut } from "firebase/auth";
 
 const Menubar = () => {
+    const auth = getAuth();
+    const navigate = useNavigate();
+    const logOut = () => {
+        signOut(auth).then(() => {
+            console.log(auth)
+            navigate('/login');
+            localStorage.removeItem('userLoginInfo');
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
     return (
         <div className="bg-primary pt-[38px] pb-[47px] w-[186px] rounded-[20px]">
             <div>
@@ -74,9 +86,9 @@ const Menubar = () => {
                 </NavLink>
             </div>
             {/* </div> */}
-            <Link to='/login' className='pl-[45px pr-[70px mt-[193px] flex justify-center'>
+            <div onClick={logOut} className='pl-[45px pr-[70px mt-[193px] flex justify-center'>
                 <ImExit size={45} color='white' className='pl-[45px pt- pb-[26px text-white' />
-            </Link>
+            </div>
         </div>
     );
 };
