@@ -5,7 +5,7 @@ import google from '../assets/google.png';
 import { Link, useNavigate } from 'react-router';
 import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { toast, ToastContainer } from 'react-toastify';
-
+import { PacmanLoader } from 'react-spinners';
 
 const Login = () => {
     const auth = getAuth();
@@ -16,6 +16,7 @@ const Login = () => {
     const [emailErr, setEmailErr] = useState('');
     const [passwordErr, setPasswordErr] = useState('');
     const [show, setShow] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const handleEmail = e => {
         setEmail(e.target.value);
@@ -39,7 +40,7 @@ const Login = () => {
         }
         else {
             if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
-                setEmailErr('আরে ভাই ইমেইল টা ঠিক কইরা লেখ')
+                setEmailErr('Please provide correct email');
             }
         }
         if (!password) {
@@ -60,13 +61,16 @@ const Login = () => {
         else if(!/(?=.{8,})/.test(password)){
           setPasswordErr('Your password must be eight characters long')
         } */
-        if (email && password && /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+       if (email && password && /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+            setLoading(true);
             signInWithEmailAndPassword(auth, email, password)
                 .then((user) => {
                     console.log(user);
                     console.log('login done');
                     setEmail('');
                     setPassword('');
+                    toast.success('Login successfully done.');
+                    setLoading(false);
                     setTimeout(() => {
                         navigate('/home');
                     }, 2000)
@@ -80,6 +84,7 @@ const Login = () => {
                     if (errorCode.includes('auth/invalid-credential')) {
                         toast.error('please provide correct email & password')
                     }
+                    setLoading(false);
                 });
 
         }
@@ -87,12 +92,13 @@ const Login = () => {
 
     const handleGoogleAuth = () => {
         const auth = getAuth();
+        setLoading(true);
         signInWithPopup(auth, provider)
             .then((user) => {
                 console.log(user);
                 console.log('google auth success')
                 // ...
-
+                setLoading(false);
                 setTimeout(() => {
                     navigate('/home');
                 }, 2000)
@@ -148,6 +154,7 @@ const Login = () => {
                             type={show ? "text" : 'password'} className='py-[20px] px-[50px] border-b-2 border-black/30 rounded-[8.6px] focus:outline-0 w-full'
                             placeholder='Password'
                         />
+
                         {
                             show ? <FaEye size={18} onClick={() => setShow(!show)} className='absolute top-5.5 right-6 cursor-pointer' /> :
                                 <FaEyeSlash size={18} onClick={() => setShow(!show)} className='absolute top-5.5 right-6 cursor-pointer' />
@@ -160,9 +167,19 @@ const Login = () => {
                     </div>
                 </div>
                 <div className='w-[368px] mt-[30px]'>
-                    <button onClick={handleLogin} className="w-full font-secondary text-white py-5 bg-primary rounded-[86px]">
-                        Login to Continue
-                    </button>
+
+                    {
+                        loading
+                            ?
+                            <div className="flex justify-center">
+                                <PacmanLoader color='#1e1e1e' />
+                            </div>
+                            :
+                            <button onClick={handleLogin} className="w-full font-secondary text-white py-5 bg-primary rounded-[86px]">
+                                Login to Continue
+                            </button>
+                    }
+
                     <p className="text-center text-primary text-[13px] mt-[30px] font-sans">Don't have an account ? {" "}
                         <Link to='/registration' className='text-[#EA6C00]'>Sign up</Link>
                     </p>
