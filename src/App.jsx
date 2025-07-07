@@ -6,6 +6,8 @@ import Registration from "./pages/Registration"
 import { createBrowserRouter, RouterProvider } from "react-router";
 import Root from "./pages/Root";
 import Settings from "./pages/Settings";
+import store from './store'
+import { Provider } from 'react-redux'
 
 const router = createBrowserRouter([
   {
@@ -42,7 +44,9 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
-      <RouterProvider router={router}></RouterProvider>
+      <Provider store={store}>
+        <RouterProvider router={router}></RouterProvider>
+      </Provider>
     </>
   )
 }

@@ -6,11 +6,14 @@ import { Link, useNavigate } from 'react-router';
 import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { toast, ToastContainer } from 'react-toastify';
 import { PacmanLoader } from 'react-spinners';
+import { useDispatch } from 'react-redux';
+import { userLoginInfo } from '../slice/userSlice';
 
 const Login = () => {
     const auth = getAuth();
     const provider = new GoogleAuthProvider();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [emailErr, setEmailErr] = useState('');
@@ -66,6 +69,8 @@ const Login = () => {
             signInWithEmailAndPassword(auth, email, password)
                 .then((user) => {
                     console.log(user);
+                    dispatch(userLoginInfo(user));
+                    localStorage.setItem('userLoginInfo', JSON.stringify(user));
                     console.log('login done');
                     setEmail('');
                     setPassword('');
