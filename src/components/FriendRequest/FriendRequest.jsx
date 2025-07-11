@@ -6,8 +6,30 @@ import friend3 from '../../assets/home/kiren.png';
 import friend4 from '../../assets/home/tajeshwani.png';
 import friend5 from '../../assets/home/marvin.png';
 import Button from "../../Layout/Button";
+import { getDatabase, onValue, ref } from "firebase/database";
+import { use, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 const FriendRequest = () => {
+    const [friendReqList, setfriendReqList] = useState([]);
+    const db = getDatabase();
+    const data = useSelector(state => state.userInfo.user.user)
+    useEffect(() => {
+        const arr = [];
+        const starCountRef = ref(db, 'frinedRequests/');
+        onValue(starCountRef, (snapshot) => {
+            console.log(snapshot)
+            snapshot.forEach(item => {
+                console.log(item.key, 'item_keys')
+                console.log(item.val());
+                if(data.uid === item.val().receiverId){
+                    arr.push(item.val())
+                }
+            })
+            setfriendReqList(arr)
+        });
+        console.log(friendReqList);
+    }, [])
     const users = [
         {
             image: friend1,
@@ -54,16 +76,16 @@ const FriendRequest = () => {
 
             </Flex>
             <div className="pr-[30px] mt-1.5 mr-0.5 h-[90%] overflow-y-auto">
-                {
-                    users.map((user, index) =>
-                        <Flex className={`pt-4 ${index === users.length - 1 ? '' : 'border-b-2 border-black/25 pb-[13px]'}`}>
+                { 
+                    friendReqList.map((user, index) =>
+                        <Flex className={`pt-4 ${index === friendReqList.length - 1 ? '' : 'border-b-2 border-black/25 pb-[13px]'}`}>
                             <Flex className='gap-[11px]'>
                                 <div>
-                                    <img src={user.image} alt="" />
+                                    <img src={friend3} alt="" />
                                 </div>
                                 <div>
-                                    <h6 className="font-primary text-lg font-semibold">{user.user_name}</h6>
-                                    <p className="font-primary text-sm font-medium text-[rgba(77,77,77,0.75)]">{user.last_message}</p>
+                                    <h6 className="font-primary text-lg font-semibold">{user.senderName}</h6>
+                                    <p className="font-primary text-sm font-medium text-[rgba(77,77,77,0.75)]">{user?.last_message}</p>
                                 </div>
                             </Flex>
                             <div>

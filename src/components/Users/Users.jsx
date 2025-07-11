@@ -7,14 +7,17 @@ import friend4 from '../../assets/home/tajeshwani.png';
 import friend5 from '../../assets/home/marvin.png';
 import Button from "../../Layout/Button";
 import { getDatabase, ref, onValue, set } from "firebase/database";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 
 
 const Users = () => {
     const db = getDatabase();
-    const [userList, setUserList] = useState([])
+    const [userList, setUserList] = useState([]);
+    const [frndReqBtn, setFrndReqBtn] = useState(false);
+    const [isDisabled, setIsDisabled] = useState(true);
+    const [activeIndex, setActiveIndex] = useState(null);
     const data = useSelector(state => state.userInfo.user.user)
     useEffect(() => {
         const userRef = ref(db, 'users/');
@@ -72,14 +75,26 @@ const Users = () => {
         }
     ];
 
-    const handleFrndReq = (user) => {
+    const handleFrndReq = (user, index) => {
         console.log(user);
-        set(ref(db, 'frinedRequests/' + user.userId), {
+        set(ref(db, 'frinedRequests/' + user.userId + data.uid), {
             senderId: data.uid,
             senderName: data.displayName,
             receiverId: user.userId,
             receiverName: user.username
         });
+        setFrndReqBtn(!frndReqBtn);
+        setActiveIndex(index);
+    }
+    const handleCancelReq = (user, index) => {
+        set(ref(db, 'frinedRequests/' + user.userId + data.uid), {
+            senderId: data.uid,
+            senderName: data.displayName,
+            receiverId: null,
+            receiverName: user.username
+        });
+        setFrndReqBtn(!frndReqBtn);
+        setActiveIndex(index);
     }
 
     return (
@@ -103,7 +118,13 @@ const Users = () => {
                                 </div>
                             </Flex>
                             <div className="pr-[30px]">
-                                <Button onClick={() => handleFrndReq(user)} className='px-2 py-0.5'>+</Button>
+                                {
+                                    activeIndex === index &&
+                                    frndReqBtn ? 
+                                    <Button isDisabled={isDisabled} onClick={() => handleCancelReq(user, index)} className='px-2 py-0.5'>-</Button>
+                                    :
+                                    <Button onClick={() => handleFrndReq(user, index)} className='px-2 py-0.5'>+</Button>
+                                }
                             </div>
                         </Flex>)
                 }
