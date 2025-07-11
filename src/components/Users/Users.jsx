@@ -6,7 +6,7 @@ import friend3 from '../../assets/home/kiren.png';
 import friend4 from '../../assets/home/tajeshwani.png';
 import friend5 from '../../assets/home/marvin.png';
 import Button from "../../Layout/Button";
-import { getDatabase, ref, onValue } from "firebase/database";
+import { getDatabase, ref, onValue, set } from "firebase/database";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
@@ -25,13 +25,14 @@ const Users = () => {
                 console.log(item.key, 'item-keys')
                 console.log(item.val());
                 if (data.uid !== item.key) {
-                    arr.push(item.val())
+                    arr.push({ ...item.val(), userId: item.key })
                 }
             })
             setUserList(arr)
         });
     }, [])
-    console.log(userList)
+    console.log(userList);
+
     const users = [
         {
             image: friend1,
@@ -70,6 +71,17 @@ const Users = () => {
             last_replay_time: 'Today, 12:22pm'
         }
     ];
+
+    const handleFrndReq = (user) => {
+        console.log(user);
+        set(ref(db, 'frinedRequests/' + user.userId), {
+            senderId: data.uid,
+            senderName: data.displayName,
+            receiverId: user.userId,
+            receiverName: user.username
+        });
+    }
+
     return (
         <div className='pl-5 pr-[22px] pt-[17px] pb-[21px rounded-[20px] shadow-[0_4px_4px_rgba(0,0,0,0.25)]'>
             <Flex>
@@ -79,7 +91,7 @@ const Users = () => {
             </Flex>
             <div className="pr-[30px] mt-1.5 mr-0.5 h-[90%] overflow-y-auto">
                 {
-                    userList.map((user, index) => 
+                    userList.map((user, index) =>
                         <Flex className={`pt-4 ${index === userList.length - 1 ? '' : 'border-b-2 border-black/25 pb-[13px]'}`}>
                             <Flex className='gap-[11px]'>
                                 <div>
@@ -91,7 +103,7 @@ const Users = () => {
                                 </div>
                             </Flex>
                             <div className="pr-[30px]">
-                                <Button className='px-2 py-0.5'>+</Button>
+                                <Button onClick={() => handleFrndReq(user)} className='px-2 py-0.5'>+</Button>
                             </div>
                         </Flex>)
                 }
