@@ -6,9 +6,10 @@ import friend3 from '../../assets/home/kiren.png';
 import friend4 from '../../assets/home/tajeshwani.png';
 import friend5 from '../../assets/home/marvin.png';
 import Button from "../../Layout/Button";
-import { getDatabase, onValue, ref } from "firebase/database";
-import { use, useEffect, useState } from "react";
+import { getDatabase, onValue, ref, set } from "firebase/database";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { toast, ToastContainer } from "react-toastify";
 
 const FriendRequest = () => {
     const [friendReqList, setfriendReqList] = useState([]);
@@ -21,8 +22,9 @@ const FriendRequest = () => {
             console.log(snapshot)
             snapshot.forEach(item => {
                 console.log(item.key, 'item_keys')
+                console.log(data.uid, 'current-id')
                 console.log(item.val());
-                if(data.uid === item.val().receiverId){
+                if (data.uid === item.val().receiverId) {
                     arr.push(item.val())
                 }
             })
@@ -30,6 +32,26 @@ const FriendRequest = () => {
         });
         console.log(friendReqList);
     }, [])
+
+    const handleAcceptFriendReq = (user) => {
+        console.log(user)
+        set(ref(db, 'friends/' + user.senderId), {
+            friendId: user.senderId,
+            friendName: user.senderName
+        });
+        set(ref(db, 'frinedRequests/' + user.receiverId + user.senderId), {
+            senderId: user.senderId,
+            senderName: user.senderName,
+            receiverId: null,
+            receiverName: user.receiverName
+        });
+        console.log(user.receiverId)
+        // const acceptFriend = friendReqList.filter(frndReqUser => frndReqUser.senderId !== user.senderId);
+        // setfriendReqList(acceptFriend);
+        console.log(friendReqList)
+        toast.success(`ওই, ${user.senderName} এখন তোমার দোস্ত, রিলোড দেও একটা`);
+    }
+    console.log(friendReqList)
     const users = [
         {
             image: friend1,
@@ -70,13 +92,25 @@ const FriendRequest = () => {
     ];
     return (
         <div className='pl-5 pr-[22px] pt-[17px] pb-[21px'>
+            <ToastContainer
+                position="bottom-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick={false}
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+            />
             <Flex>
                 <h4 className="font-primary font-semibold text-xl">Friend  Request</h4>
                 <BsThreeDotsVertical size={19} className="" />
 
             </Flex>
             <div className="pr-[30px] mt-1.5 mr-0.5 h-[90%] overflow-y-auto">
-                { 
+                {
                     friendReqList.map((user, index) =>
                         <Flex className={`pt-4 ${index === friendReqList.length - 1 ? '' : 'border-b-2 border-black/25 pb-[13px]'}`}>
                             <Flex className='gap-[11px]'>
@@ -89,7 +123,7 @@ const FriendRequest = () => {
                                 </div>
                             </Flex>
                             <div>
-                                <Button className='px-2 py-0.5'>Accept</Button>
+                                <Button onClick={() => handleAcceptFriendReq(user)} className='px-2 py-0.5'>Accept</Button>
                             </div>
                         </Flex>)
                 }
