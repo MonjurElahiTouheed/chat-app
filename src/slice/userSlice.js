@@ -9,7 +9,7 @@ export const userSlice = createSlice({
     userLoginInfo: (state, action) => {
         console.log(state.value);
         console.log(action.payload);
-        state.value = action.payload
+        state.user = action.payload;
     },
   }
 })

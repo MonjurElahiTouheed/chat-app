@@ -2,26 +2,48 @@ import user_profile from '../../assets/home/user_profile.png';
 import { SlHome } from "react-icons/sl";
 import { AiFillMessage } from "react-icons/ai";
 import { GoGear } from "react-icons/go";
-import { Link, NavLink, useNavigate } from 'react-router';
+import { NavLink, useNavigate } from 'react-router';
 import { ImExit } from "react-icons/im";
 import { getAuth, signOut } from "firebase/auth";
+import { useDispatch, useSelector } from 'react-redux';
+import { userLoginInfo } from '../../slice/userSlice';
+import MovingComponent from 'react-moving-text'
 
 const Menubar = () => {
     const auth = getAuth();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const data = useSelector(state => state.userInfo.user.user)
+    console.log(data)
     const logOut = () => {
         signOut(auth).then(() => {
-            console.log(auth)
-            navigate('/login');
-            localStorage.removeItem('userLoginInfo');
+            console.log(auth);
+            setTimeout(() => {
+                navigate('/login');
+                dispatch(userLoginInfo(null));
+                localStorage.removeItem('userLoginInfo');
+            }, 1500)
         }).catch((error) => {
             console.log(error);
         });
     }
     return (
-        <div className="bg-primary pt-[38px] pb-[47px] w-[186px] rounded-[20px]">
+        <div className="bg-primary pt-[38px] pb-[47px] w-[186px] rounded-[20px] font-primary text-white font-bold">
             <div>
                 <img className='mx-auto' src={user_profile} alt="" />
+                <p className='text-center mt-4 text-xl'>
+                    <MovingComponent
+                        type="jelly"
+                        duration="1000ms"
+                        delay="0s"
+                        direction="normal"
+                        timing="ease"
+                        iteration="7"
+                        fillMode="none">
+                        {data.displayName}
+                    </MovingComponent>
+                </p>
+
             </div>
             {/* <div className='mt-[98px] flex flex-col gap-[60px] pl-[25px]'>
                 <NavLink

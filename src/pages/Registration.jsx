@@ -2,12 +2,15 @@ import { useState } from 'react';
 import registration from '../assets/registration.png';
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { Link, useNavigate } from 'react-router';
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from "firebase/auth";
 import { toast, ToastContainer } from 'react-toastify';
 import { PacmanLoader } from 'react-spinners';
+import { getDatabase, ref, set } from "firebase/database";
+
 
 const Registration = () => {
     const auth = getAuth();
+    const db = getDatabase();
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [fullName, setFullName] = useState('');
@@ -79,29 +82,41 @@ const Registration = () => {
             setLoading(true);
             createUserWithEmailAndPassword(auth, email, password)
                 .then((user) => {
-                    sendEmailVerification(auth.currentUser);
-                    console.log('user', user);
-                    toast.success('Registration successfully done, Please verify your email');
-                    
+                    updateProfile(auth.currentUser, {
+                        displayName: fullName
+                    }).then(() => {
+                        sendEmailVerification(auth.currentUser);
+                        console.log('user', user.user.displayName);
+                        console.log('user', user);
+                        toast.success('Registration successfully done, Please verify your email');
+
                         setLoading(false);
-                        
+                        set(ref(db, 'users/' + user.user.uid), {
+                            username: user.user.displayName,
+                            email: user.user.email
+                        });
                         setTimeout(() => {
                             navigate('/login');
                         }, 2000)
                         setEmail('');
                         setFullName('');
                         setPassword('');
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                        const err = error.message;
-                        if (err.includes('auth/email-already-in-use')) {
-                            setEmailErr('This Email already in exists');
-                        }
-                        if (err.includes('auth/weak-password')) {
-                            setPasswordErr('Password should be at least 6 characters');
-                        }
-                        setLoading(false);
+                    }).catch((error) => {
+                        // An error occurred
+                        // ...
+                    });
+
+                })
+                .catch((error) => {
+                    console.log(error);
+                    const err = error.message;
+                    if (err.includes('auth/email-already-in-use')) {
+                        setEmailErr('This Email already in exists');
+                    }
+                    if (err.includes('auth/weak-password')) {
+                        setPasswordErr('Password should be at least 6 characters');
+                    }
+                    setLoading(false);
                 })
         }
     }

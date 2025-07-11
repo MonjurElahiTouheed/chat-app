@@ -5,7 +5,7 @@ import App from './App.jsx'
 import firebaseConfig from './components/Authentication/firebaseConfig.js';
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+  
     <App />
-  </StrictMode>,
+  
 )

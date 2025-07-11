@@ -19,8 +19,7 @@ const Root = () => {
     }, [])
 
     onAuthStateChanged(auth, (user) => {
-        console.log(user)
-        if (user.emailVerified) {
+        if (user?.emailVerified) {
             setVerify(true);
         }
         setLoading(false);

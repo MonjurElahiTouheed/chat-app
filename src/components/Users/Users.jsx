@@ -6,9 +6,32 @@ import friend3 from '../../assets/home/kiren.png';
 import friend4 from '../../assets/home/tajeshwani.png';
 import friend5 from '../../assets/home/marvin.png';
 import Button from "../../Layout/Button";
+import { getDatabase, ref, onValue } from "firebase/database";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+
 
 
 const Users = () => {
+    const db = getDatabase();
+    const [userList, setUserList] = useState([])
+    const data = useSelector(state => state.userInfo.user.user)
+    useEffect(() => {
+        const userRef = ref(db, 'users/');
+        onValue(userRef, (snapshot) => {
+
+            const arr = [];
+            snapshot.forEach(item => {
+                console.log(item.key, 'item-keys')
+                console.log(item.val());
+                if (data.uid !== item.key) {
+                    arr.push(item.val())
+                }
+            })
+            setUserList(arr)
+        });
+    }, [])
+    console.log(userList)
     const users = [
         {
             image: friend1,
@@ -56,15 +79,15 @@ const Users = () => {
             </Flex>
             <div className="pr-[30px] mt-1.5 mr-0.5 h-[90%] overflow-y-auto">
                 {
-                    users.map((user, index) =>
-                        <Flex className={`pt-4 ${index === users.length - 1 ? '' : 'border-b-2 border-black/25 pb-[13px]'}`}>
+                    userList.map((user, index) => 
+                        <Flex className={`pt-4 ${index === userList.length - 1 ? '' : 'border-b-2 border-black/25 pb-[13px]'}`}>
                             <Flex className='gap-[11px]'>
                                 <div>
-                                    <img src={user.image} alt="" />
+                                    <img src={user?.image} alt="" />
                                 </div>
                                 <div>
-                                    <h6 className="font-primary text-sm font-semibold">{user.user_name}</h6>
-                                    <p className="font-primary text-[10px] font-medium text-[rgba(77,77,77,0.50)] mt-[3px]">{user.last_replay_time}</p>
+                                    <h6 className="font-primary text-sm font-semibold">{user.username}</h6>
+                                    <p className="font-primary text-[10px] font-medium text-[rgba(77,77,77,0.50)] mt-[3px]">{user.email}</p>
                                 </div>
                             </Flex>
                             <div className="pr-[30px]">

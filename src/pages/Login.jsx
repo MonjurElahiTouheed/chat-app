@@ -3,7 +3,7 @@ import login from '../assets/login.jpg';
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import google from '../assets/google.png';
 import { Link, useNavigate } from 'react-router';
-import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
 import { toast, ToastContainer } from 'react-toastify';
 import { PacmanLoader } from 'react-spinners';
 import { useDispatch } from 'react-redux';
@@ -64,7 +64,7 @@ const Login = () => {
         else if(!/(?=.{8,})/.test(password)){
           setPasswordErr('Your password must be eight characters long')
         } */
-       if (email && password && /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+        if (email && password && /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
             setLoading(true);
             signInWithEmailAndPassword(auth, email, password)
                 .then((user) => {
@@ -102,6 +102,8 @@ const Login = () => {
             .then((user) => {
                 console.log(user);
                 console.log('google auth success')
+                dispatch(userLoginInfo(user));
+                localStorage.setItem('userLoginInfo', JSON.stringify(user));
                 // ...
                 setLoading(false);
                 setTimeout(() => {
@@ -114,6 +116,10 @@ const Login = () => {
                 // ...
             });
     }
+
+    onAuthStateChanged(auth, (user) => {
+        console.log(user);
+    });
     return (
         <div className="flex">
             <ToastContainer
