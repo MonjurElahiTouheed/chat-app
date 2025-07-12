@@ -7,9 +7,11 @@ import friend4 from '../../assets/home/tajeshwani.png';
 import friend5 from '../../assets/home/marvin.png';
 import { getDatabase, onValue, ref } from "firebase/database";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 const Friends = ({className, height_value}) => {
     const db = getDatabase();
+    const data = useSelector(state => state.userInfo.user.user);
     const [friendList, setFriendList] = useState([]);
     useEffect(() => {
         const arr = [];
@@ -17,7 +19,9 @@ const Friends = ({className, height_value}) => {
                 onValue(starCountRef, (snapshot) => {
                     console.log(snapshot.val())
                     snapshot.forEach(item => {
-                        arr.push(item.val())
+                        if(data.uid !== item.key){
+                            arr.push(item.val())
+                        }
                     })
                     setFriendList(arr);
                     console.log(friendList)
