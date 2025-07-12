@@ -40,7 +40,16 @@ const Menubar = () => {
                         timing="ease"
                         iteration="7"
                         fillMode="none">
-                        {data.displayName}
+                        <MovingComponent
+                            type="bounce"
+                            duration="1000ms"
+                            delay="0s"
+                            direction="normal"
+                            timing="ease"
+                            iteration="7"
+                            fillMode="none">
+                            {data.displayName}
+                        </MovingComponent>
                     </MovingComponent>
                 </p>
 
