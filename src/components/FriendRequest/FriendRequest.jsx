@@ -13,6 +13,7 @@ import { toast, ToastContainer } from "react-toastify";
 
 const FriendRequest = () => {
     const [friendReqList, setfriendReqList] = useState([]);
+    const [accepted, setAccepted] = useState(false);
     const db = getDatabase();
     const data = useSelector(state => state.userInfo.user.user)
     useEffect(() => {
@@ -49,7 +50,8 @@ const FriendRequest = () => {
         // const acceptFriend = friendReqList.filter(frndReqUser => frndReqUser.senderId !== user.senderId);
         // setfriendReqList(acceptFriend);
         console.log(friendReqList)
-        toast.success(`ওই, ${user.senderName} এখন তোমার দোস্ত, রিলোড দেও একটা`);
+        toast.success(`ওই, ${user.senderName} এখন তোমার দোস্ত 😐`);
+        setAccepted(true);
     }
     console.log(friendReqList)
     const users = [
@@ -123,7 +125,12 @@ const FriendRequest = () => {
                                 </div>
                             </Flex>
                             <div>
-                                <Button onClick={() => handleAcceptFriendReq(user)} className='px-2 py-0.5'>Accept</Button>
+                                {
+                                    accepted ?
+                                        <Button isDisabled={true} className='px-2 py-0.5'>Accepted</Button>
+                                        :
+                                        <Button onClick={() => handleAcceptFriendReq(user)} className='px-2 py-0.5'>Accept</Button>
+                                }
                             </div>
                         </Flex>)
                 }
