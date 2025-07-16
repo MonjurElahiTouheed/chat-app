@@ -5,23 +5,25 @@ import friend2 from '../../assets/home/swathi.png';
 import friend3 from '../../assets/home/kiren.png';
 import friend4 from '../../assets/home/tajeshwani.png';
 import friend5 from '../../assets/home/marvin.png';
-import { getDatabase, onValue, ref } from "firebase/database";
+import { getDatabase, onValue, ref, remove } from "firebase/database";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import Button from "../../Layout/Button";
+import { toast } from "react-toastify";
 
 const Friends = ({className, height_value}) => {
     const db = getDatabase();
     const data = useSelector(state => state.userInfo.user.user);
     const [friendList, setFriendList] = useState([]);
     useEffect(() => {
-        const arr = [];
-        const starCountRef = ref(db, 'friends/');
-                onValue(starCountRef, (snapshot) => {
+        const friendRef = ref(db, 'friends/');
+        onValue(friendRef, (snapshot) => {
+                    const arr = [];
                     console.log(snapshot.val())
                     snapshot.forEach(item => {
-                        if(data.uid !== item.key){
-                            arr.push(item.val())
-                        }
+                        // if(data.uid !== item.key){
+                            arr.push({...item.val(), userId: item.key})
+                        // }
                     })
                     setFriendList(arr);
                     console.log(friendList)
@@ -101,6 +103,13 @@ const Friends = ({className, height_value}) => {
             last_replay_time: 'Today, 12:22pm'
         }
     ];
+    const handleUnfriend = (user) => {
+        remove(ref(db, `friends/${user.userId}`))
+                    .then(() => {
+                        console.log(friendList)
+                        toast.error(` ${user.senderName} ওর সাথে কাট্টি 😐`);
+                    })
+    }
     return (
         <div className={`pl-5 pr-[22px] pt-[17px] rounded-[20px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] ${className}`}>
             <Flex>
@@ -117,11 +126,12 @@ const Friends = ({className, height_value}) => {
                                     <img src={friend1} alt="" />
                                 </div>
                                 <div>
-                                    <h6 className="font-primary text-sm font-semibold">{user.friendName}</h6>
+                                    <h6 className="font-primary text-sm font-semibold">{user.senderName}</h6>
                                     <p className="font-primary text-xs font-medium text-[rgba(77,77,77,0.75)]">{user?.last_message}</p>
                                 </div>
                             </Flex>
-                            <p className="font-primary text-[10px] font-medium text-[rgba(77,77,77,0.50)]">{user?.last_replay_time}</p>
+                            {/* <p className="font-primary text-[10px] font-medium text-[rgba(77,77,77,0.50)]">{user?.last_replay_time}</p> */}
+                            <Button onClick={() => handleUnfriend(user)} className='px-2 py-0.5'>unfriend</Button>
                         </Flex>)
                 }
             </div>

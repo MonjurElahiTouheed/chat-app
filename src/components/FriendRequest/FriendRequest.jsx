@@ -6,7 +6,7 @@ import friend3 from '../../assets/home/kiren.png';
 import friend4 from '../../assets/home/tajeshwani.png';
 import friend5 from '../../assets/home/marvin.png';
 import Button from "../../Layout/Button";
-import { getDatabase, onValue, ref, set } from "firebase/database";
+import { getDatabase, onValue, push, ref, remove, set } from "firebase/database";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
@@ -24,9 +24,10 @@ const FriendRequest = () => {
             snapshot.forEach(item => {
                 console.log(item.key, 'item_keys')
                 console.log(data.uid, 'current-id')
+                console.log(item.key);
                 console.log(item.val());
                 if (data.uid === item.val().receiverId) {
-                    arr.push(item.val())
+                    arr.push({ ...item.val(), userId: item.key })
                 }
             })
             setfriendReqList(arr)
@@ -36,16 +37,25 @@ const FriendRequest = () => {
 
     const handleAcceptFriendReq = (user) => {
         console.log(user)
-        set(ref(db, 'friends/' + user.senderId), {
-            friendId: user.senderId,
-            friendName: user.senderName
-        });
-        set(ref(db, 'frinedRequests/' + user.receiverId + user.senderId), {
+        set(push(ref(db, 'friends/')), {
             senderId: user.senderId,
             senderName: user.senderName,
-            receiverId: null,
+            receiverId: user.receiverId,
             receiverName: user.receiverName
         });
+        remove(ref(db, `friendRequests/`))
+            .then(() => {
+                console.log(friendReqList)
+                toast.success(`ওই, ${user.senderName} এখন তোমার দোস্ত 😐`);
+                setAccepted(true);
+            })
+            ;
+        // set(ref(db, 'frinedRequests/' + user.receiverId + user.senderId), {
+        //     senderId: user.senderId,
+        //     senderName: user.senderName,
+        //     receiverId: null,
+        //     receiverName: user.receiverName
+        // });
         console.log(user.receiverId)
         // const acceptFriend = friendReqList.filter(frndReqUser => frndReqUser.senderId !== user.senderId);
         // setfriendReqList(acceptFriend);

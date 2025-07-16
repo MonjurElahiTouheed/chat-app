@@ -33,7 +33,7 @@ const Menubar = () => {
                 <img className='mx-auto' src={user_profile} alt="" />
                 <p className='text-center mt-4 text-xl'>
                     <MovingComponent
-                        type="jelly"
+                        type="pulse"
                         duration="1000ms"
                         delay="0s"
                         direction="normal"

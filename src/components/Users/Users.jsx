@@ -9,11 +9,13 @@ import Button from "../../Layout/Button";
 import { getDatabase, ref, onValue, set, push } from "firebase/database";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import MovingComponent from 'react-moving-text'
 
 const Users = () => {
     const db = getDatabase();
     const [userList, setUserList] = useState([]);
     const [friendReqList, setfriendReqList] = useState([]);
+    const [friendList, setfriendList] = useState([]);
     const data = useSelector(state => state.userInfo.user.user)
     useEffect(() => {
         const userRef = ref(db, 'users/');
@@ -40,15 +42,32 @@ const Users = () => {
             console.log(snapshot)
             snapshot.forEach(item => {
                 console.log(item.val());
-                    arr.push(item.val().receiverId + item.val().senderId)
-                    console.log(item.val().receiverId)
-                    console.log(item.val().senderId)
+                arr.push(item.val().receiverId + item.val().senderId)
+                console.log(item.val().receiverId)
+                console.log(item.val().senderId)
             })
             console.log(arr)
             setfriendReqList(arr)
             console.log(friendReqList);
         });
         console.log(friendReqList);
+    }, [])
+    useEffect(() => {
+        const friendRef = ref(db, 'friends/');
+        onValue(friendRef, (snapshot) => {
+            const arr = [];
+            console.log(snapshot)
+            snapshot.forEach(item => {
+                console.log(item.val());
+                arr.push(item.val().receiverId + item.val().senderId)
+                console.log(item.val().receiverId)
+                console.log(item.val().senderId)
+            })
+            console.log(arr)
+            setfriendList(arr)
+            console.log(friendReqList);
+        });
+        console.log(friendList);
     }, [])
 
 
@@ -91,7 +110,7 @@ const Users = () => {
         }
     ];
 
-    const handleFrndReq = (user, index) => {
+    const handleFrndReq = (user) => {
         console.log(user);
         console.log(user.friendId);
         console.log(user.userId);
@@ -112,6 +131,7 @@ const Users = () => {
             receiverName: user.username
         });
     }
+
 
     return (
         <div className='pl-5 pr-[22px] pt-[17px] pb-[21px rounded-[20px] shadow-[0_4px_4px_rgba(0,0,0,0.25)]'>
@@ -135,11 +155,26 @@ const Users = () => {
                             </Flex>
                             <div className="pr-[30px]">
                                 {
-                                    friendReqList.includes(data.uid + user.userId) || friendReqList.includes(user.userId + data.uid)
+                                    friendList.includes(data.uid + user.userId) || friendList.includes(user.userId + data.uid)
                                         ?
-                                        <Button isDisabled={true} className='px-2 py-0.5'>-</Button>
+                                        <MovingComponent
+                                            type="bounce"
+                                            duration="1000ms"
+                                            delay="0s"
+                                            direction="normal"
+                                            timing="ease"
+                                            iteration="7"
+                                            fillMode="none">
+                                            Friend
+                                        </MovingComponent>
+
                                         :
-                                        <Button onClick={() => handleFrndReq(user, index)} className='px-2 py-0.5'>+</Button>
+                                        friendReqList.includes(data.uid + user.userId) || friendReqList.includes(user.userId + data.uid)
+
+                                            ?
+                                            <Button isDisabled={true} className='px-2 py-0.5'>-</Button>
+                                            :
+                                            <Button onClick={() => handleFrndReq(user)} className='px-2 py-0.5'>+</Button>
                                 }
                             </div>
                         </Flex>)
