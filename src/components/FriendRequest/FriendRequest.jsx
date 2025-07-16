@@ -17,9 +17,9 @@ const FriendRequest = () => {
     const db = getDatabase();
     const data = useSelector(state => state.userInfo.user.user)
     useEffect(() => {
-        const arr = [];
-        const starCountRef = ref(db, 'frinedRequests/');
+        const starCountRef = ref(db, 'friendRequests/');
         onValue(starCountRef, (snapshot) => {
+            const arr = [];
             console.log(snapshot)
             snapshot.forEach(item => {
                 console.log(item.key, 'item_keys')
@@ -53,7 +53,7 @@ const FriendRequest = () => {
         toast.success(`ওই, ${user.senderName} এখন তোমার দোস্ত 😐`);
         setAccepted(true);
     }
-    console.log(friendReqList)
+    // console.log(friendReqList)
     const users = [
         {
             image: friend1,

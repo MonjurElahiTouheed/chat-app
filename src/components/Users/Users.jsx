@@ -6,15 +6,14 @@ import friend3 from '../../assets/home/kiren.png';
 import friend4 from '../../assets/home/tajeshwani.png';
 import friend5 from '../../assets/home/marvin.png';
 import Button from "../../Layout/Button";
-import { getDatabase, ref, onValue, set } from "firebase/database";
+import { getDatabase, ref, onValue, set, push } from "firebase/database";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 const Users = () => {
     const db = getDatabase();
     const [userList, setUserList] = useState([]);
-    const [frndReqBtn, setFrndReqBtn] = useState(false);
-    const [activeIndex, setActiveIndex] = useState(null);
+    const [friendReqList, setfriendReqList] = useState([]);
     const data = useSelector(state => state.userInfo.user.user)
     useEffect(() => {
         const userRef = ref(db, 'users/');
@@ -31,9 +30,27 @@ const Users = () => {
             console.log(arr)
             setUserList(arr)
         });
-
     }, [])
     console.log(userList);
+
+    useEffect(() => {
+        const friendReqRef = ref(db, 'friendRequests/');
+        onValue(friendReqRef, (snapshot) => {
+            const arr = [];
+            console.log(snapshot)
+            snapshot.forEach(item => {
+                console.log(item.val());
+                    arr.push(item.val().receiverId + item.val().senderId)
+                    console.log(item.val().receiverId)
+                    console.log(item.val().senderId)
+            })
+            console.log(arr)
+            setfriendReqList(arr)
+            console.log(friendReqList);
+        });
+        console.log(friendReqList);
+    }, [])
+
 
     const users = [
         {
@@ -78,15 +95,14 @@ const Users = () => {
         console.log(user);
         console.log(user.friendId);
         console.log(user.userId);
-        set(ref(db, 'frinedRequests/' + user.userId + data.uid), {
+        set(push(ref(db, 'friendRequests/')), {
             senderId: data.uid,
             senderName: data.displayName,
             receiverId: user.userId,
             receiverName: user.username
         });
 
-        setFrndReqBtn(!frndReqBtn);
-        setActiveIndex(index);
+
     }
     const handleCancelReq = (user, index) => {
         set(ref(db, 'frinedRequests/' + user.userId + data.uid), {
@@ -95,8 +111,6 @@ const Users = () => {
             receiverId: null,
             receiverName: user.username
         });
-        setFrndReqBtn(!frndReqBtn);
-        setActiveIndex(index);
     }
 
     return (
@@ -121,9 +135,9 @@ const Users = () => {
                             </Flex>
                             <div className="pr-[30px]">
                                 {
-                                    activeIndex === index &&
-                                        frndReqBtn ?
-                                        <Button isDisabled={true} onClick={() => handleCancelReq(user, index)} className='px-2 py-0.5'>-</Button>
+                                    friendReqList.includes(data.uid + user.userId) || friendReqList.includes(user.userId + data.uid)
+                                        ?
+                                        <Button isDisabled={true} className='px-2 py-0.5'>-</Button>
                                         :
                                         <Button onClick={() => handleFrndReq(user, index)} className='px-2 py-0.5'>+</Button>
                                 }
