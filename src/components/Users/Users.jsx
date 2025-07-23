@@ -16,6 +16,7 @@ const Users = () => {
     const [userList, setUserList] = useState([]);
     const [friendReqList, setfriendReqList] = useState([]);
     const [friendList, setfriendList] = useState([]);
+    const [blockList, setBlockList] = useState([]);
     const data = useSelector(state => state.userInfo.user.user)
     useEffect(() => {
         const userRef = ref(db, 'users/');
@@ -70,6 +71,23 @@ const Users = () => {
         console.log(friendList);
     }, [])
 
+    useEffect(() => {
+        const blockRef = ref(db, 'blockList/');
+        onValue(blockRef, (snapshot) => {
+            const arr = [];
+            console.log(snapshot)
+            snapshot.forEach(item => {
+                console.log(item.val());
+                arr.push(item.val().receiverId + item.val().senderId)
+                console.log(item.val().receiverId)
+                console.log(item.val().senderId)
+            })
+            console.log(arr)
+            setBlockList(arr)
+            console.log(blockList);
+        });
+        console.log(blockList);
+    }, [])
 
     const users = [
         {
@@ -154,7 +172,20 @@ const Users = () => {
                                 </div>
                             </Flex>
                             <div className="pr-[30px]">
-                                {
+                                { blockList.includes(data.uid + user.userId) || blockList.includes(user.userId + data.uid)
+                                        ?
+                                        
+                                        <MovingComponent
+                                            type="jelly"
+                                            duration="1000ms"
+                                            delay="0s"
+                                            direction="normal"
+                                            timing="ease"
+                                            iteration="7"
+                                            fillMode="none">
+                                            blocked
+                                        </MovingComponent>
+                                        :
                                     friendList.includes(data.uid + user.userId) || friendList.includes(user.userId + data.uid)
                                         ?
                                         <MovingComponent

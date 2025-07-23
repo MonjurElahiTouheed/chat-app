@@ -13,7 +13,7 @@ import { toast, ToastContainer } from "react-toastify";
 
 const FriendRequest = () => {
     const [friendReqList, setfriendReqList] = useState([]);
-    const [accepted, setAccepted] = useState(false);
+    // const [accepted, setAccepted] = useState(false);
     const db = getDatabase();
     const data = useSelector(state => state.userInfo.user.user)
     useEffect(() => {
@@ -38,17 +38,16 @@ const FriendRequest = () => {
     const handleAcceptFriendReq = (user) => {
         console.log(user)
         set(push(ref(db, 'friends/')), {
-            senderId: user.senderId,
-            senderName: user.senderName,
-            receiverId: user.receiverId,
-            receiverName: user.receiverName
-        });
-        remove(ref(db, `friendRequests/`))
-            .then(() => {
-                console.log(friendReqList)
-                toast.success(`ওই, ${user.senderName} এখন তোমার দোস্ত 😐`);
-                setAccepted(true);
-            })
+            ...user
+        }).then(() => {
+
+            remove(ref(db, `friendRequests/` + user.userId))
+                .then(() => {
+                    console.log(friendReqList)
+                    toast.success(`ওই, ${user.senderName} এখন তোমার দোস্ত 😐`);
+                    
+                })
+        })
             ;
         // set(ref(db, 'frinedRequests/' + user.receiverId + user.senderId), {
         //     senderId: user.senderId,
@@ -60,8 +59,7 @@ const FriendRequest = () => {
         // const acceptFriend = friendReqList.filter(frndReqUser => frndReqUser.senderId !== user.senderId);
         // setfriendReqList(acceptFriend);
         console.log(friendReqList)
-        toast.success(`ওই, ${user.senderName} এখন তোমার দোস্ত 😐`);
-        setAccepted(true);
+        // setAccepted(true);
     }
     // console.log(friendReqList)
     const users = [
@@ -135,12 +133,13 @@ const FriendRequest = () => {
                                 </div>
                             </Flex>
                             <div>
-                                {
+                                {/* {
                                     accepted ?
                                         <Button isDisabled={true} className='px-2 py-0.5'>Accepted</Button>
                                         :
                                         <Button onClick={() => handleAcceptFriendReq(user)} className='px-2 py-0.5'>Accept</Button>
-                                }
+                                } */}
+                                <Button onClick={() => handleAcceptFriendReq(user)} className='px-2 py-0.5'>Accept</Button>
                             </div>
                         </Flex>)
                 }
