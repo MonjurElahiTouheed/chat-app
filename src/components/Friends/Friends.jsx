@@ -29,6 +29,7 @@ const Friends = ({ className, height_value }) => {
             console.log(friendList)
         });
     }, [])
+    console.log(friendList)
     const users = [
         {
             image: friend1,
@@ -112,16 +113,35 @@ const Friends = ({ className, height_value }) => {
     }
 
     const handleBlock = (user) => {
-        set(push(ref(db, 'blockList/')), {
-            ...user
-        })
-            .then(() => {
+        if (data.uid === user.senderId) {
+            set(push(ref(db, 'blockList/')), {
+                blockId: user.receiverId,
+                blockName: user.receiverName,
+                blockById: user.senderId,
+                blockByName: user?.senderName
+            }).then(() => {
                 remove(ref(db, "friends/" + user.userId))
                     .then(() => {
                         console.log(friendList)
                         toast.error(` ${user.senderName} ওর সাথে কাট্টি 😐`);
                     })
             })
+        }
+        else {
+            set(push(ref(db, 'blockList/')), {
+                blockId: user.senderId,
+                blockName: user.senderName,
+                blockById: user.receiverId,
+                blockByName: user?.receiverName
+            }).then(() => {
+                remove(ref(db, "friends/" + user.userId))
+                    .then(() => {
+                        console.log(friendList)
+                        toast.error(` ${user.senderName} ওর সাথে কাট্টি 😐`);
+                    })
+            })
+        }
+
 
     }
 

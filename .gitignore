@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# OS / Google Drive system files
+.DS_Store
+Thumbs.db
+**/desktop.ini   
+# Prevents Google Drive desktop.ini files from being tracked
