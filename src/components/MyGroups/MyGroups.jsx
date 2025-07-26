@@ -5,9 +5,39 @@ import friend2 from '../../assets/home/swathi.png';
 import friend3 from '../../assets/home/kiren.png';
 import friend4 from '../../assets/home/tajeshwani.png';
 import friend5 from '../../assets/home/marvin.png';
+import groupImg from '../../assets/home/group_2.png';
 import Button from "../../Layout/Button";
+import { useEffect, useState } from "react";
+import { getDatabase, onValue, ref, remove } from "firebase/database";
+import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 const MyGroups = () => {
+    const [myGroups, setMyGroups] = useState([]);
+    const data = useSelector(state => state.userInfo.user.user)
+    const db = getDatabase();
+    useEffect(() => {
+        const myGroupsRef = ref(db, 'groupList/');
+        onValue(myGroupsRef, (snapshot) => {
+            const arr = [];
+            console.log(snapshot.val())
+            snapshot.forEach(item => {
+                if(data.uid === item.val().groupCreatorId){
+                    arr.push({ ...item.val(), groupId: item.key })
+                }
+            })
+            setMyGroups(arr);
+            console.log(myGroups)
+        });
+    }, [])
+
+    const handleLeave = (group) => {
+        remove(ref(db, 'myGroups/' + group.groupId))
+        .then(()=> {
+            toast.error('You left the group 😭');
+        })
+    }
+
     const users = [
         {
             image: friend1,
@@ -55,18 +85,18 @@ const MyGroups = () => {
             </Flex>
             <div className="pr-[10px] mt-1.5 mr-0.5 h-[90%] overflow-y-auto">
                 {
-                    users.map((user, index) =>
-                        <Flex className={`pt-4 ${index === users.length - 1 ? '' : 'border-b-2 border-black/25 pb-[13px]'}`}>
+                    myGroups.map((group, index) =>
+                        <Flex className={`pt-4 ${index === myGroups.length - 1 ? '' : 'border-b-2 border-black/25 pb-[13px]'}`}>
                             <Flex className='gap-[11px]'>
                                 <div>
-                                    <img src={user.image} alt="" />
+                                    <img src={groupImg} alt="" />
                                 </div>
                                 <div>
-                                    <h6 className="font-primary text-sm font-semibold">{user.user_name}</h6>
-                                    <p className="font-primary text-xs font-medium text-[rgba(77,77,77,0.75)]">{user.last_message}</p>
+                                    <h6 className="font-primary text-sm font-semibold">{group.groupName}</h6>
+                                    <p className="font-primary text-xs font-medium text-[rgba(77,77,77,0.75)]">{group.groupTag}</p>
                                 </div>
                             </Flex>
-                            <p className="font-primary text-[10px] font-medium text-[rgba(77,77,77,0.50)]">{user.last_replay_time}</p>
+                            <Button onClick={() => handleLeave(group)} className="px-[22px] py-0.5 bg-red-500 hover:bg-red-700 active:bg-red-800">Leave</Button>
                         </Flex>)
                 }
             </div>

@@ -98,7 +98,7 @@ const BlockedUsers = () => {
                                     <p className="font-primary text-[10px] font-medium text-[rgba(77,77,77,0.50)] mt-0.5">{user?.last_replay_time}</p>
                                 </div>
 
-                                <Button onClick={() => handleUnblock(user)} className='px-2 py-0.5'>unblock</Button>
+                                <Button onClick={() => handleUnblock(user)} className='px-2 py-0.5 bg-green-500'>unblock</Button>
                             </Flex>
                         </Flex>)
                 }
