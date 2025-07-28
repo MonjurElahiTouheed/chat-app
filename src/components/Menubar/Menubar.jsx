@@ -41,7 +41,7 @@ const Menubar = () => {
                         iteration="7"
                         fillMode="none">
                         <MovingComponent
-                            type="bounce"
+                            type="jelly"
                             duration="1000ms"
                             delay="0s"
                             direction="normal"
