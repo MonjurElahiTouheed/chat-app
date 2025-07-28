@@ -42,7 +42,7 @@ const MyGroups = () => {
             console.log(snapshot.val())
             snapshot.forEach(item => {
                 if ( data.uid === item.val().groupCreatorId) {
-                    arr.push({ ...item.val(), groupId: item.key })
+                    arr.push({ ...item.val(), requestId: item.key })
                 }
             })
             setgroupRequests(arr);
@@ -54,6 +54,12 @@ const MyGroups = () => {
         remove(ref(db, 'groupList/' + group.groupId))
             .then(() => {
                 toast.error('You left the group 😭');
+            })
+    }
+    const handleReject = (request) => {
+        remove(ref(db, 'groupRequests/' + request.requestId))
+            .then(() => {
+                toast.error('Rejected 😈');
             })
     }
 
@@ -126,7 +132,7 @@ const MyGroups = () => {
                                             <p className="font-primary text-xs font-medium text-[rgba(77,77,77,0.75)]">{request.groupName}</p>
                                         </div>
                                     </Flex>
-                                    <Button onClick={() => handleLeave(request)} className="px-[22px] py-0.5 bg-red-500 hover:bg-red-700 active:bg-red-800">Leave</Button>
+                                    <Button onClick={() => handleReject(request)} className="px-[22px] py-0.5 bg-red-500 hover:bg-red-700 active:bg-red-800">Reject</Button>
                                 </Flex>)
                         }
                     </div>
