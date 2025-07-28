@@ -8,7 +8,7 @@ import friend5 from '../../assets/home/marvin.png';
 import groupImg from '../../assets/home/group_2.png';
 import Button from "../../Layout/Button";
 import { useEffect, useState } from "react";
-import { getDatabase, onValue, ref, remove } from "firebase/database";
+import { getDatabase, onValue, ref, remove, update } from "firebase/database";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 
@@ -27,7 +27,7 @@ const MyGroups = () => {
             const arr = [];
             console.log(snapshot.val())
             snapshot.forEach(item => {
-                if (data.uid === item.val().groupCreatorId) {
+                if (data.uid === item.val().groupCreatorId || data.uid === item.val().memberRequestId) {
                     arr.push({ ...item.val(), groupId: item.key })
                 }
             })
@@ -41,7 +41,7 @@ const MyGroups = () => {
             const arr = [];
             console.log(snapshot.val())
             snapshot.forEach(item => {
-                if ( data.uid === item.val().groupCreatorId) {
+                if (data.uid === item.val().groupCreatorId) {
                     arr.push({ ...item.val(), requestId: item.key })
                 }
             })
@@ -55,6 +55,18 @@ const MyGroups = () => {
             .then(() => {
                 toast.error('You left the group 😭');
             })
+    }
+    const handleAccept = (request) => {
+        const groupRef = ref(db, 'groupList/' + request.groupId);
+
+        update(groupRef, {
+            memberRequestId: request.memberId
+        }).then(() => {
+            remove(ref(db, 'groupRequests/' + request.requestId))
+                .then(() => {
+                    toast.error('Accepted 🤩');
+                })
+        })
     }
     const handleReject = (request) => {
         remove(ref(db, 'groupRequests/' + request.requestId))
@@ -132,6 +144,7 @@ const MyGroups = () => {
                                             <p className="font-primary text-xs font-medium text-[rgba(77,77,77,0.75)]">{request.groupName}</p>
                                         </div>
                                     </Flex>
+                                    <Button onClick={() => handleAccept(request)} className="px-[22px] py-0.5 bg-red-500 hover:bg-red-700 active:bg-red-800">Accept</Button>
                                     <Button onClick={() => handleReject(request)} className="px-[22px] py-0.5 bg-red-500 hover:bg-red-700 active:bg-red-800">Reject</Button>
                                 </Flex>)
                         }

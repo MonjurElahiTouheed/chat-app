@@ -86,8 +86,9 @@ const Groups = () => {
             const arr = [];
             console.log(snapshot.val())
             snapshot.forEach(item => {
-                if (data.uid !== item.val().groupCreatorId)
+                if (data.uid !== item.val().memberRequestId && data.uid !== item.val().groupCreatorId ){
                     arr.push({ ...item.val(), groupId: item.key })
+                }
             })
             setGroupList(arr);
             console.log(groupList)
