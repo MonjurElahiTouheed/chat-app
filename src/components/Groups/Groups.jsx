@@ -5,15 +5,21 @@ import groupImage1 from '../../assets/home/group_2.png';
 import groupImage2 from '../../assets/home/group_3.png';
 import groupImage3 from '../../assets/home/group_4.png';
 import friend5 from '../../assets/home/marvin.png';
-import { getDatabase, onValue, push, ref, set } from "firebase/database";
+import { getDatabase, onValue, push, ref, remove, set } from "firebase/database";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import MovingComponent from 'react-moving-text';
+import { IoIosCheckmark } from "react-icons/io";
+
 const Groups = () => {
     const [isGroupCreated, setIsGroupCreated] = useState(false);
+    const [joinRequest, setJoinRequest] = useState(false);
     const [groupName, setGroupName] = useState('');
     const [groupTagName, setGroupTagName] = useState('');
     const [groupList, setGroupList] = useState([]);
+    const [groupRequests, setGroupRequests] = useState([]);
+    // const [myGroups, setMyGroups] = useState([]);
     const data = useSelector(state => state.userInfo.user.user)
     const db = getDatabase();
     const groups = [
@@ -53,8 +59,18 @@ const Groups = () => {
             groupCreatorId: data.uid
         }).then(() => {
             toast.success('Group created succesfully.')
+            setIsGroupCreated(false)
+            // set(push(ref(db, 'myGroups/')), {
+            //     groupName: groupName,
+            //     groupTag: groupTagName,
+            //     groupCreatorId: data.uid
+            // })
         })
-        setIsGroupCreated(false)
+
+        // .then(() => {
+        //     toast.success('Group created succesfully.')
+        //     setIsGroupCreated(false)
+        // })
     }
 
     const handleGroupName = (e) => {
@@ -64,27 +80,64 @@ const Groups = () => {
         setGroupTagName(e.target.value);
     }
 
-    const handleJoin = (group) => {
-        // set(push(ref(db, 'myGroups/')), {
-        //     ...group
-        // }).then(() => {
-        //     toast.success('You are added to the group')
-        // })
-    }
-
     useEffect(() => {
         const groupListRef = ref(db, 'groupList/');
         onValue(groupListRef, (snapshot) => {
             const arr = [];
             console.log(snapshot.val())
             snapshot.forEach(item => {
-                if(data.uid !== item.val().groupCreatorId)
-                arr.push({ ...item.val(), userId: item.key })
+                if (data.uid !== item.val().groupCreatorId)
+                    arr.push({ ...item.val(), groupId: item.key })
             })
             setGroupList(arr);
             console.log(groupList)
         });
-    }, [])
+    }, []);
+    useEffect(() => {
+        const groupRequestsRef = ref(db, 'groupRequests/');
+        onValue(groupRequestsRef, (snapshot) => {
+            const arr = [];
+            console.log(snapshot.val())
+            snapshot.forEach(item => {
+                
+                    arr.push(item.val().memberId+item.val().groupId)
+                    console.log(item.val())
+            })
+            setGroupRequests(arr);
+            console.log(groupRequests)
+        });
+    }, []);
+
+    const handleJoin = (group) => {
+        set(ref(db, 'groupRequests/' + data.uid+group.groupId), {
+            memberId: data.uid,
+            memberName: data.displayName,
+            groupId: group.groupId,
+            groupName: group.groupName,
+            groupCreatorId: group.groupCreatorId
+        }).then(() => {
+            setJoinRequest(true);
+            toast.success('You are added to the group')
+        })
+    }
+    const handleCancelGroupReq = (group) => {
+        remove(ref(db, 'groupRequests/' + data.uid+group.groupId))
+        console.log('cancel')
+    }
+
+    // useEffect(() => {
+    //     const myGroupRef = ref(db, 'myGroups/');
+    //     onValue(myGroupRef, (snapshot) => {
+    //         const arr = [];
+    //         console.log(snapshot.val())
+    //         snapshot.forEach(item => {
+    //             if (data.uid !== item.val().groupCreatorId)
+    //                 arr.push({ ...item.val(), userId: item.key })
+    //         })
+    //         setMyGroups(arr);
+    //         console.log(myGroups)
+    //     });
+    // }, [])
 
     console.log(groupList)
     return (
@@ -95,7 +148,7 @@ const Groups = () => {
                 {
                     isGroupCreated ?
                         <Button onClick={() => handleCreateGroup()} className='px-5 py-2 bg-red-500 hover:bg-red-800'>
-                            Cancel
+                            Back
                         </Button>
                         :
                         <Button onClick={() => handleCreateGroup()} className='px-5 py-2'>
@@ -133,12 +186,18 @@ const Groups = () => {
                                         </div>
                                     </Flex>
                                     <div>
-                                        <Button onClick={() => handleJoin(group)} className='px-[22px] py-0.5'>Join</Button>
+                                        {
+                                            groupRequests.includes(data.uid + group.groupId) ?
+                                                <Button onClick={() => handleCancelGroupReq(group)} className='px-5 py-2 bg-red-500 hover:bg-red-800'>
+                                                    Cancel request
+                                                </Button>
+                                                :
+                                                <Button onClick={() => handleJoin(group)} className='px-[22px] py-0.5'>Join</Button>
+                                        }
                                     </div>
                                 </Flex>)
                         }
                     </div>
-
             }
         </div>
     );

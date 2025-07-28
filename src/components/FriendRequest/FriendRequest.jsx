@@ -45,7 +45,6 @@ const FriendRequest = () => {
                 .then(() => {
                     console.log(friendReqList)
                     toast.success(`ওই, ${user.senderName} এখন তোমার দোস্ত 😐`);
-                    
                 })
         })
             ;

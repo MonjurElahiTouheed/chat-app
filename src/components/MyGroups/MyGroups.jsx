@@ -15,14 +15,19 @@ import { useSelector } from "react-redux";
 const MyGroups = () => {
     const [myGroups, setMyGroups] = useState([]);
     const data = useSelector(state => state.userInfo.user.user)
+    const [groupRequestBtn, setgroupRequestBtn] = useState(false);
+    const [groupRequests, setgroupRequests] = useState([]);
     const db = getDatabase();
+    const handlegroupRequest = () => {
+        setgroupRequestBtn(!groupRequestBtn);
+    }
     useEffect(() => {
-        const myGroupsRef = ref(db, 'groupList/');
-        onValue(myGroupsRef, (snapshot) => {
+        const groupListRef = ref(db, 'groupList/');
+        onValue(groupListRef, (snapshot) => {
             const arr = [];
             console.log(snapshot.val())
             snapshot.forEach(item => {
-                if(data.uid === item.val().groupCreatorId){
+                if (data.uid === item.val().groupCreatorId) {
                     arr.push({ ...item.val(), groupId: item.key })
                 }
             })
@@ -30,12 +35,26 @@ const MyGroups = () => {
             console.log(myGroups)
         });
     }, [])
+    useEffect(() => {
+        const groupRequestsRef = ref(db, 'groupRequests/');
+        onValue(groupRequestsRef, (snapshot) => {
+            const arr = [];
+            console.log(snapshot.val())
+            snapshot.forEach(item => {
+                if ( data.uid === item.val().groupCreatorId) {
+                    arr.push({ ...item.val(), groupId: item.key })
+                }
+            })
+            setgroupRequests(arr);
+            console.log(groupRequests)
+        });
+    }, [])
 
     const handleLeave = (group) => {
-        remove(ref(db, 'myGroups/' + group.groupId))
-        .then(()=> {
-            toast.error('You left the group 😭');
-        })
+        remove(ref(db, 'groupList/' + group.groupId))
+            .then(() => {
+                toast.error('You left the group 😭');
+            })
     }
 
     const users = [
@@ -80,26 +99,56 @@ const MyGroups = () => {
         <div className='pl-5 pr-[22px] pt-[17px] pb-[21px rounded-[20px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] mt-[45px w-[80%'>
             <Flex>
                 <h4 className="font-primary font-semibold text-xl">My Groups</h4>
-                <BsThreeDotsVertical size={19} className="" />
-
-            </Flex>
-            <div className="pr-[10px] mt-1.5 mr-0.5 h-[90%] overflow-y-auto">
+                {/* <BsThreeDotsVertical size={19} className="" /> */}
                 {
-                    myGroups.map((group, index) =>
-                        <Flex className={`pt-4 ${index === myGroups.length - 1 ? '' : 'border-b-2 border-black/25 pb-[13px]'}`}>
-                            <Flex className='gap-[11px]'>
-                                <div>
-                                    <img src={groupImg} alt="" />
-                                </div>
-                                <div>
-                                    <h6 className="font-primary text-sm font-semibold">{group.groupName}</h6>
-                                    <p className="font-primary text-xs font-medium text-[rgba(77,77,77,0.75)]">{group.groupTag}</p>
-                                </div>
-                            </Flex>
-                            <Button onClick={() => handleLeave(group)} className="px-[22px] py-0.5 bg-red-500 hover:bg-red-700 active:bg-red-800">Leave</Button>
-                        </Flex>)
+                    groupRequestBtn ?
+                        <Button onClick={handlegroupRequest} className='px-5 py-2 bg-red-500 hover:bg-red-800'>
+                            Back
+                        </Button>
+                        :
+                        <Button onClick={handlegroupRequest} className='px-5 py-2'>
+                            Group Requests
+                        </Button>
                 }
-            </div>
+            </Flex>
+            {
+                groupRequestBtn ?
+                    <div className="pr-[10px] mt-1.5 mr-0.5 h-[90%] overflow-y-auto">
+                        {
+                            groupRequests.map((request, index) =>
+                                <Flex className={`pt-4 ${index === myGroups.length - 1 ? '' : 'border-b-2 border-black/25 pb-[13px]'}`}>
+                                    <Flex className='gap-[11px]'>
+                                        <div>
+                                            <img src={friend3} alt="" />
+                                        </div>
+                                        <div>
+                                            <h6 className="font-primary text-sm font-semibold">{request.memberName}</h6>
+                                            <p className="font-primary text-xs font-medium text-[rgba(77,77,77,0.75)]">{request.groupName}</p>
+                                        </div>
+                                    </Flex>
+                                    <Button onClick={() => handleLeave(request)} className="px-[22px] py-0.5 bg-red-500 hover:bg-red-700 active:bg-red-800">Leave</Button>
+                                </Flex>)
+                        }
+                    </div>
+                    :
+                    <div className="pr-[10px] mt-1.5 mr-0.5 h-[90%] overflow-y-auto">
+                        {
+                            myGroups.map((group, index) =>
+                                <Flex className={`pt-4 ${index === myGroups.length - 1 ? '' : 'border-b-2 border-black/25 pb-[13px]'}`}>
+                                    <Flex className='gap-[11px]'>
+                                        <div>
+                                            <img src={groupImg} alt="" />
+                                        </div>
+                                        <div>
+                                            <h6 className="font-primary text-sm font-semibold">{group.groupName}</h6>
+                                            <p className="font-primary text-xs font-medium text-[rgba(77,77,77,0.75)]">{group.groupTag}</p>
+                                        </div>
+                                    </Flex>
+                                    <Button onClick={() => handleLeave(group)} className="px-[22px] py-0.5 bg-red-500 hover:bg-red-700 active:bg-red-800">Leave</Button>
+                                </Flex>)
+                        }
+                    </div>
+            }
         </div>
     );
 };
