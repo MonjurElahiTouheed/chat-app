@@ -17,7 +17,24 @@ const Users = () => {
     const [friendReqList, setfriendReqList] = useState([]);
     const [friendList, setfriendList] = useState([]);
     const [blockList, setBlockList] = useState([]);
+    const [filterUser, setFilterUser] = useState([]);
+
     const data = useSelector(state => state.userInfo.user.user)
+    const handleSearch = e => {
+        let arr = [];
+        if(e.target.value.length == 0){
+            setFilterUser([]);
+        }
+
+        else {
+            userList.filter(item => {
+                if (item.username.toLowerCase().includes(e.target.value.toLowerCase())){
+                    arr.push(item);
+                    setFilterUser(arr);
+                }
+            })
+        }
+    }
     useEffect(() => {
         const userRef = ref(db, 'users/');
         onValue(userRef, (snapshot) => {
@@ -158,8 +175,62 @@ const Users = () => {
                 <BsThreeDotsVertical size={19} className="" />
 
             </Flex>
+            <input type="text"  className="px-2 w-[200px] py-2 border-8" onChange={handleSearch}/>
             <div className="pr-[30px] mt-1.5 mr-0.5 h-[90%] overflow-y-auto">
                 {
+                    filterUser.length > 0
+                    ?
+                    filterUser.map((user, index) =>
+                        <Flex className={`pt-4 ${index === userList.length - 1 ? '' : 'border-b-2 border-black/25 pb-[13px]'}`}>
+                            <Flex className='gap-[11px]'>
+                                <div>
+                                    <img src={user?.image} alt="" />
+                                </div>
+                                <div>
+                                    <h6 className="font-primary text-sm font-semibold">{user.username}</h6>
+                                    <p className="font-primary text-[10px] font-medium text-[rgba(77,77,77,0.50)] mt-[3px]">{user.email}</p>
+                                </div>
+                            </Flex>
+                            <div className="pr-[30px]">
+                                { blockList.includes(data.uid + user.userId) || blockList.includes(user.userId + data.uid)
+                                        ?
+                                        
+                                        <MovingComponent
+                                            type="jelly"
+                                            duration="1000ms"
+                                            delay="0s"
+                                            direction="normal"
+                                            timing="ease"
+                                            iteration="7"
+                                            fillMode="none">
+                                            blocked
+                                        </MovingComponent>
+                                        :
+                                    friendList.includes(data.uid + user.userId) || friendList.includes(user.userId + data.uid)
+                                        ?
+                                        <MovingComponent
+                                            type="bounce"
+                                            duration="1000ms"
+                                            delay="0s"
+                                            direction="normal"
+                                            timing="ease"
+                                            iteration="7"
+                                            fillMode="none">
+                                            Friend
+                                        </MovingComponent>
+
+                                        :
+                                        friendReqList.includes(data.uid + user.userId) || friendReqList.includes(user.userId + data.uid)
+
+                                            ?
+                                            <Button isDisabled={true} className='px-2 py-0.5'>-</Button>
+                                            :
+                                            <Button onClick={() => handleFrndReq(user)} className='px-2 py-0.5'>+</Button>
+                                }
+                            </div>
+                        </Flex>)
+                    :
+
                     userList.map((user, index) =>
                         <Flex className={`pt-4 ${index === userList.length - 1 ? '' : 'border-b-2 border-black/25 pb-[13px]'}`}>
                             <Flex className='gap-[11px]'>

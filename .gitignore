@@ -28,3 +28,6 @@ dist-ssr
 Thumbs.db
 **/desktop.ini   
 # Prevents Google Drive desktop.ini files from being tracked
+
+# Prevents my notes from being pushed to github repo
+notes.txt
