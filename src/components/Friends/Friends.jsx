@@ -1,10 +1,6 @@
 import { BsThreeDotsVertical } from "react-icons/bs";
 import Flex from "../../Layout/Flex";
 import friend1 from '../../assets/home/raghav.png'
-import friend2 from '../../assets/home/swathi.png';
-import friend3 from '../../assets/home/kiren.png';
-import friend4 from '../../assets/home/tajeshwani.png';
-import friend5 from '../../assets/home/marvin.png';
 import { getDatabase, onValue, push, ref, remove, set } from "firebase/database";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -12,9 +8,11 @@ import Button from "../../Layout/Button";
 import { toast } from "react-toastify";
 
 const Friends = ({ className, height_value }) => {
+
     const db = getDatabase();
     const data = useSelector(state => state.userInfo.user.user);
     const [friendList, setFriendList] = useState([]);
+
     useEffect(() => {
         const friendRef = ref(db, 'friends/');
         onValue(friendRef, (snapshot) => {
@@ -29,81 +27,7 @@ const Friends = ({ className, height_value }) => {
             console.log(friendList)
         });
     }, [])
-    console.log(friendList)
-    const users = [
-        {
-            image: friend1,
-            user_name: 'Raghav',
-            last_message: 'Dinner?',
-            last_replay_time: 'Today, 8:56pm'
-        },
-        {
-            image: friend5,
-            user_name: 'Swathi',
-            last_message: 'Sure!',
-            last_replay_time: 'Today, 2:31pm'
-        },
-        {
-            image: friend3,
-            user_name: 'Kiran',
-            last_message: 'Hi.....',
-            last_replay_time: 'Yesterday, 6:22pm'
-        },
-        {
-            image: friend1,
-            user_name: 'Tejeshwini C',
-            last_message: 'I will call him today.',
-            last_replay_time: 'Today, 12:22pm'
-        },
-        {
-            image: friend5,
-            user_name: 'Marvin McKinney',
-            last_message: 'I will call him today.',
-            last_replay_time: 'Today, 12:22pm'
-        },
-        {
-            image: friend3,
-            user_name: 'Marvin McKinney',
-            last_message: 'I will call him today.',
-            last_replay_time: 'Today, 12:22pm'
-        },
-        {
-            image: friend1,
-            user_name: 'Raghav',
-            last_message: 'Dinner?',
-            last_replay_time: 'Today, 8:56pm'
-        },
-        {
-            image: friend5,
-            user_name: 'Swathi',
-            last_message: 'Sure!',
-            last_replay_time: 'Today, 2:31pm'
-        },
-        {
-            image: friend3,
-            user_name: 'Kiran',
-            last_message: 'Hi.....',
-            last_replay_time: 'Yesterday, 6:22pm'
-        },
-        {
-            image: friend1,
-            user_name: 'Tejeshwini C',
-            last_message: 'I will call him today.',
-            last_replay_time: 'Today, 12:22pm'
-        },
-        {
-            image: friend5,
-            user_name: 'Marvin McKinney',
-            last_message: 'I will call him today.',
-            last_replay_time: 'Today, 12:22pm'
-        },
-        {
-            image: friend3,
-            user_name: 'Marvin McKinney',
-            last_message: 'I will call him today.',
-            last_replay_time: 'Today, 12:22pm'
-        }
-    ];
+    
     const handleUnfriend = (user) => {
         remove(ref(db, "friends/" + user.userId))
             .then(() => {
@@ -113,6 +37,7 @@ const Friends = ({ className, height_value }) => {
     }
 
     const handleBlock = (user) => {
+
         if (data.uid === user.senderId) {
             set(push(ref(db, 'blockList/')), {
                 blockId: user.receiverId,
@@ -127,6 +52,7 @@ const Friends = ({ className, height_value }) => {
                     })
             })
         }
+
         else {
             set(push(ref(db, 'blockList/')), {
                 blockId: user.senderId,
@@ -141,8 +67,6 @@ const Friends = ({ className, height_value }) => {
                     })
             })
         }
-
-
     }
 
     return (

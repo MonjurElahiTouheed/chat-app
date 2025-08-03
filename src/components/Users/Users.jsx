@@ -1,10 +1,6 @@
 import { BsThreeDotsVertical } from "react-icons/bs";
 import Flex from "../../Layout/Flex";
-import friend1 from '../../assets/home/raghav.png'
-import friend2 from '../../assets/home/swathi.png';
-import friend3 from '../../assets/home/kiren.png';
-import friend4 from '../../assets/home/tajeshwani.png';
-import friend5 from '../../assets/home/marvin.png';
+import friend3 from '../../assets/home/kiren.png'
 import Button from "../../Layout/Button";
 import { getDatabase, ref, onValue, set, push } from "firebase/database";
 import { useEffect, useState } from "react";
@@ -12,6 +8,7 @@ import { useSelector } from "react-redux";
 import MovingComponent from 'react-moving-text'
 
 const Users = () => {
+
     const db = getDatabase();
     const [userList, setUserList] = useState([]);
     const [friendReqList, setfriendReqList] = useState([]);
@@ -21,6 +18,7 @@ const Users = () => {
 
     const data = useSelector(state => state.userInfo.user.user)
     const handleSearch = e => {
+        
         let arr = [];
         if(e.target.value.length == 0){
             setFilterUser([]);
@@ -35,6 +33,7 @@ const Users = () => {
             })
         }
     }
+
     useEffect(() => {
         const userRef = ref(db, 'users/');
         onValue(userRef, (snapshot) => {
@@ -70,6 +69,7 @@ const Users = () => {
         });
         console.log(friendReqList);
     }, [])
+
     useEffect(() => {
         const friendRef = ref(db, 'friends/');
         onValue(friendRef, (snapshot) => {
@@ -106,45 +106,6 @@ const Users = () => {
         console.log(blockList);
     }, [])
 
-    const users = [
-        {
-            image: friend1,
-            user_name: 'Raghav',
-            last_message: 'Dinner?',
-            last_replay_time: 'Today, 8:56pm'
-        },
-        {
-            image: friend5,
-            user_name: 'Swathi',
-            last_message: 'Sure!',
-            last_replay_time: 'Today, 2:31pm'
-        },
-        {
-            image: friend3,
-            user_name: 'Kiran',
-            last_message: 'Hi.....',
-            last_replay_time: 'Yesterday, 6:22pm'
-        },
-        {
-            image: friend1,
-            user_name: 'Tejeshwini C',
-            last_message: 'I will call him today.',
-            last_replay_time: 'Today, 12:22pm'
-        },
-        {
-            image: friend5,
-            user_name: 'Marvin McKinney',
-            last_message: 'I will call him today.',
-            last_replay_time: 'Today, 12:22pm'
-        },
-        {
-            image: friend3,
-            user_name: 'Marvin McKinney',
-            last_message: 'I will call him today.',
-            last_replay_time: 'Today, 12:22pm'
-        }
-    ];
-
     const handleFrndReq = (user) => {
         console.log(user);
         console.log(user.friendId);
@@ -155,9 +116,8 @@ const Users = () => {
             receiverId: user.userId,
             receiverName: user.username
         });
-
-
     }
+
     const handleCancelReq = (user, index) => {
         set(ref(db, 'frinedRequests/' + user.userId + data.uid), {
             senderId: data.uid,
@@ -176,7 +136,7 @@ const Users = () => {
 
             </Flex>
             <input type="text"  className="px-2 w-[200px] py-2 border-8" onChange={handleSearch}/>
-            <div className="pr-[30px] mt-1.5 mr-0.5 h-[90%] overflow-y-auto">
+            <div className="pr-[30px] mt-1.5 mr-0.5 h-[292px] overflow-y-auto">
                 {
                     filterUser.length > 0
                     ?
@@ -184,7 +144,7 @@ const Users = () => {
                         <Flex className={`pt-4 ${index === userList.length - 1 ? '' : 'border-b-2 border-black/25 pb-[13px]'}`}>
                             <Flex className='gap-[11px]'>
                                 <div>
-                                    <img src={user?.image} alt="" />
+                                    <img src={friend3} alt="" />
                                 </div>
                                 <div>
                                     <h6 className="font-primary text-sm font-semibold">{user.username}</h6>
@@ -235,7 +195,7 @@ const Users = () => {
                         <Flex className={`pt-4 ${index === userList.length - 1 ? '' : 'border-b-2 border-black/25 pb-[13px]'}`}>
                             <Flex className='gap-[11px]'>
                                 <div>
-                                    <img src={user?.image} alt="" />
+                                    <img src={friend3} alt="" />
                                 </div>
                                 <div>
                                     <h6 className="font-primary text-sm font-semibold">{user.username}</h6>

@@ -1,10 +1,6 @@
 import { BsThreeDotsVertical } from "react-icons/bs";
 import Flex from "../../Layout/Flex";
-import friend1 from '../../assets/home/raghav.png'
-import friend2 from '../../assets/home/swathi.png';
 import friend3 from '../../assets/home/kiren.png';
-import friend4 from '../../assets/home/tajeshwani.png';
-import friend5 from '../../assets/home/marvin.png';
 import groupImg from '../../assets/home/group_2.png';
 import Button from "../../Layout/Button";
 import { useEffect, useState } from "react";
@@ -16,29 +12,14 @@ const MyGroups = () => {
     const [myGroups, setMyGroups] = useState([]);
     const data = useSelector(state => state.userInfo.user.user);
     const [groupRequestBtn, setgroupRequestBtn] = useState(false);
-
     const [groupRequests, setgroupRequests] = useState([]);
     const [groupMembers, setGroupMembers] = useState([]);
     const db = getDatabase();
+
     const handlegroupRequest = () => {
         setgroupRequestBtn(!groupRequestBtn);
     }
-    // useEffect(() => {
-    //     const groupListRef = ref(db, 'groupList/');
-    //     onValue(groupListRef, (snapshot) => {
-    //         const arr = [];
-    //         console.log(snapshot.val())
-    //         snapshot.forEach(item => {
-    //             const groupItem = item.val();
-    //             if (data.uid === groupItem.groupCreatorId) {
-    //                 //  || data.uid === item.val().memberRequestId
-    //                 arr.push({ ...item.val(), groupId: item.key })
-    //             }
-    //         })
-    //         setMyGroups(arr);
-    //         console.log(myGroups)
-    //     });
-    // }, [])
+
     useEffect(() => {
         const groupListRef = ref(db, 'groupList/');
         onValue(groupListRef, (snapshot) => {
@@ -46,9 +27,7 @@ const MyGroups = () => {
             console.log(snapshot.val())
             snapshot.forEach(item => {
                 const groupItem = item.val();
-                // if (data.uid === groupItem.groupCreatorId ) {
-                    //  || data.uid === item.val().memberRequestId
-                    arr.push({ ...item.val(), myGroupId: item.key })
+                    arr.push({ ...groupItem, myGroupId: item.key })
                 // }
             })
             setMyGroups(arr);
@@ -97,7 +76,6 @@ const MyGroups = () => {
     }
 
     const handleAccept = (request) => {
-        // const groupRef = ref(db, 'groupList/' + request.groupId);
         set(push(ref(db, 'groupMembers/')), {
             ...request
         })
@@ -107,16 +85,8 @@ const MyGroups = () => {
                         toast.error('Accepted 🤩');
                     })
             })
-
-        // update(groupRef, {
-        //     memberRequestId: request.memberId
-        // }).then(() => {
-        //     remove(ref(db, 'groupRequests/' + request.requestId))
-        //         .then(() => {
-        //             toast.error('Accepted 🤩');
-        //         })
-        // })
     }
+    
     const handleReject = (request) => {
         remove(ref(db, 'groupRequests/' + request.requestId))
             .then(() => {
@@ -142,7 +112,7 @@ const MyGroups = () => {
             </Flex>
             {
                 groupRequestBtn ?
-                    <div className="pr-[10px] mt-1.5 mr-0.5 h-[90%] overflow-y-auto">
+                    <div className="pr-[10px] mt-1.5 mr-0.5 ">
                         {
                             groupRequests.map((request, index) =>
                                 <Flex className={`pt-4 ${index === myGroups.length - 1 ? '' : 'border-b-2 border-black/25 pb-[13px]'}`}>
@@ -161,7 +131,7 @@ const MyGroups = () => {
                         }
                     </div>
                     :
-                    <div className="pr-[10px] mt-1.5 mr-0.5 h-[90%] overflow-y-auto">
+                    <div className="pr-[10px] mt-1.5 mr-0.5 h-[292px] overflow-y-auto">
                         {
                             myGroups
                             .filter(myGroup => myGroup.groupCreatorId === data.uid || groupMembers.includes(myGroup.myGroupId))

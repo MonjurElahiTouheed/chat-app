@@ -2,9 +2,6 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import Flex from "../../Layout/Flex";
 import Button from "../../Layout/Button";
 import groupImage1 from '../../assets/home/group_2.png';
-import groupImage2 from '../../assets/home/group_3.png';
-import groupImage3 from '../../assets/home/group_4.png';
-import friend5 from '../../assets/home/marvin.png';
 import { getDatabase, onValue, push, ref, remove, set } from "firebase/database";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
@@ -119,22 +116,6 @@ const Groups = () => {
         });
     }, []);
 
-    // const handleJoin = (group) => {
-    //     set(ref(db, 'groupRequests/' + data.uid + group.groupId), {
-    //         memberId: data.uid,
-    //         memberName: data.displayName,
-    //         groupId: group.groupId,
-    //         groupName: group.groupName,
-    //         groupCreatorId: group.groupCreatorId
-    //     }).then(() => {
-    //         setJoinRequest(true);
-    //         toast.success('You are added to the group')
-    //     })
-    // }
-    // const handleCancelGroupReq = (group) => {
-    //     remove(ref(db, 'groupRequests/' + data.uid + group.groupId))
-    //     console.log('cancel')
-    // }
     const handleJoin = (group) => {
         set(push(ref(db, 'groupRequests/')), {
             memberId: data.uid,
@@ -147,6 +128,7 @@ const Groups = () => {
             toast.success('You succesfully sent the join request to the group✔');
         })
     }
+
     const handleCancelGroupReq = (group) => {
         remove(ref(db, 'groupRequests/'))
         console.log('cancel')
@@ -187,7 +169,7 @@ const Groups = () => {
                         </div>
                     </div>
                     :
-                    <div className="pr-[30px] mt-1.5 mr-0.5 h-[292px h-[276px] overflow-y-auto">
+                    <div className="pr-[30px] mt-1.5 mr-0.5 h-[292px] overflow-y-auto">
                         {
                         groupList
                         .filter(group => !groupMembers.includes(group.groupId))

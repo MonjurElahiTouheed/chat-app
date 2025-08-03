@@ -39,7 +39,7 @@ const Home = () => {
                 <SearchBar />
                 <Groups></Groups>
             </div>
-            <Friends height_value='h-[90%]'></Friends>
+            <Friends height_value='h-[292px]'></Friends>
             <Users></Users>
             <FriendRequest></FriendRequest>
             <MyGroups></MyGroups>
