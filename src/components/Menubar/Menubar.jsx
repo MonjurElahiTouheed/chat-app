@@ -38,7 +38,7 @@ const Menubar = () => {
                         delay="0s"
                         direction="normal"
                         timing="ease"
-                        iteration="7"
+                        iteration="3"
                         fillMode="none">
                         <MovingComponent
                             type="jelly"
@@ -46,7 +46,7 @@ const Menubar = () => {
                             delay="0s"
                             direction="normal"
                             timing="ease"
-                            iteration="7"
+                            iteration="3"
                             fillMode="none">
                             {data.displayName}
                         </MovingComponent>

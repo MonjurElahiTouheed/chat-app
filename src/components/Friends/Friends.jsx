@@ -3,15 +3,22 @@ import Flex from "../../Layout/Flex";
 import friend1 from '../../assets/home/raghav.png'
 import { getDatabase, onValue, push, ref, remove, set } from "firebase/database";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Button from "../../Layout/Button";
 import { toast } from "react-toastify";
+import { BiMessageSquareDetail } from "react-icons/bi";
+import { currentConversationInfo } from "../../slice/currentConversationSlice";
+
 
 const Friends = ({ className, height_value }) => {
 
     const db = getDatabase();
     const data = useSelector(state => state.userInfo.user.user);
+    
+    
+    const dispatch = useDispatch();
     const [friendList, setFriendList] = useState([]);
+    
 
     useEffect(() => {
         const friendRef = ref(db, 'friends/');
@@ -27,7 +34,7 @@ const Friends = ({ className, height_value }) => {
             console.log(friendList)
         });
     }, [])
-    
+
     const handleUnfriend = (user) => {
         remove(ref(db, "friends/" + user.userId))
             .then(() => {
@@ -69,6 +76,14 @@ const Friends = ({ className, height_value }) => {
         }
     }
 
+    // msg handler for sending friend user info to redux store
+    const handleMessage = friend => {
+        console.log(friend);
+        // localStorage.setItem('currentChatInfo', JSON.stringify(friend));
+        dispatch(currentConversationInfo(friend));
+        
+    }
+
     return (
         <div className={`pl-5 pr-[22px] pt-[17px] rounded-[20px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] ${className}`}>
             <Flex>
@@ -92,7 +107,9 @@ const Friends = ({ className, height_value }) => {
                                 </div>
                             </Flex>
                             {/* <p className="font-primary text-[10px] font-medium text-[rgba(77,77,77,0.50)]">{user?.last_replay_time}</p> */}
-                            <div>
+                            <div className="flex items-center">
+                                <Button onClick={() => handleMessage(user)} className='px-2 py-0.5'><BiMessageSquareDetail size={30}/>
+                                </Button>
                                 <Button onClick={() => handleUnfriend(user)} className='px-2 py-0.5'>unfriend</Button>
                                 <Button onClick={() => handleBlock(user)} className='text-center bg-red-500 hover:bg-red-800 py-0.5 mt-2'>block</Button>
                             </div>
