@@ -79,9 +79,8 @@ const Friends = ({ className, height_value }) => {
     // msg handler for sending friend user info to redux store
     const handleMessage = friend => {
         console.log(friend);
-        // localStorage.setItem('currentChatInfo', JSON.stringify(friend));
+        localStorage.setItem('currentChatInfo', JSON.stringify(friend));
         dispatch(currentConversationInfo(friend));
-        
     }
 
     return (
