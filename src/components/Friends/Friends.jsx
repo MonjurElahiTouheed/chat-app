@@ -8,7 +8,8 @@ import Button from "../../Layout/Button";
 import { toast } from "react-toastify";
 import { BiMessageSquareDetail } from "react-icons/bi";
 import { currentConversationInfo } from "../../slice/currentConversationSlice";
-
+import { RiUserMinusFill } from "react-icons/ri";
+import { MdBlockFlipped } from "react-icons/md";
 
 const Friends = ({ className, height_value }) => {
 
@@ -106,11 +107,11 @@ const Friends = ({ className, height_value }) => {
                                 </div>
                             </Flex>
                             {/* <p className="font-primary text-[10px] font-medium text-[rgba(77,77,77,0.50)]">{user?.last_replay_time}</p> */}
-                            <div className="flex items-center">
-                                <Button onClick={() => handleMessage(user)} className='px-2 py-0.5'><BiMessageSquareDetail size={30}/>
-                                </Button>
-                                <Button onClick={() => handleUnfriend(user)} className='px-2 py-0.5'>unfriend</Button>
-                                <Button onClick={() => handleBlock(user)} className='text-center bg-red-500 hover:bg-red-800 py-0.5 mt-2'>block</Button>
+                            <div className="flex items-center gap-2">
+                                <button onClick={() => handleMessage(user)} className='px-1 py-0.5 bg-primary text-white rounded-lg'><BiMessageSquareDetail size={30}/>
+                                </button>
+                                <button onClick={() => handleUnfriend(user)} className='px-2 py-2 bg-primary text-white rounded-lg'><RiUserMinusFill /></button>
+                                <button onClick={() => handleBlock(user)} className='px-2 py-2 text-white rounded-lg bg-red-500 hover:bg-red-800 font-bold text-lg'><MdBlockFlipped /></button>
                             </div>
                         </Flex>)
                 }
