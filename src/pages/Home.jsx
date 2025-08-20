@@ -30,15 +30,10 @@ const Home = () => {
 
         // grid way below
         <div className="w-[88%] grid grid-cols-[36%_28%_28%] grid-rows-[461px_391px] gap-x-10 gap-y-6">
-            <div>
-                {/* <div className="relative">
-                    <input className="rounded-[20px] pl-[78px] w-[427px w-full pr-[17px] py-5 relative shadow-[0_4px_4px_rgba(0,0,0,0.25)]" placeholder="Search" />
-                    <LuSearch size={19} className="absolute top-1/2 -translate-y-[50%] left-[23px]" />
-                    <BsThreeDotsVertical size={19} className="absolute top-1/2 -translate-y-[50%] right-[22px]" />
-                </div> */}
-                <SearchBar />
-                <Groups></Groups>
-            </div>
+        
+                {/* <SearchBar /> */}
+            
+            <Groups></Groups>
             <Friends height_value='h-[292px]'></Friends>
             <Users></Users>
             <FriendRequest></FriendRequest>

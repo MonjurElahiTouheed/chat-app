@@ -6,6 +6,8 @@ import { getDatabase, ref, onValue, set, push } from "firebase/database";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import MovingComponent from 'react-moving-text'
+import SearchBar from "../SearchBar/SearchBar";
+import { LuSearch } from "react-icons/lu";
 
 const Users = () => {
 
@@ -132,10 +134,14 @@ const Users = () => {
         <div className='pl-5 pr-[22px] pt-[17px] pb-[21px rounded-[20px] shadow-[0_4px_4px_rgba(0,0,0,0.25)]'>
             <Flex>
                 <h4 className="font-primary font-semibold text-xl">User List</h4>
-                <BsThreeDotsVertical size={19} className="" />
+                <BsThreeDotsVertical size={19}/>
 
             </Flex>
-            <input type="text"  className="px-2 w-[200px] py-2 border-8" onChange={handleSearch}/>
+            <div className="relative mt-3">
+                <input type="text" className="rounded-[20px] pl-[58px] w-full pr-[17px] py-5 relative shadow-[0_4px_4px_rgba(0,0,0,0.25)] outline-none" placeholder="Search" onChange={handleSearch}/>
+                <LuSearch size={19} className="absolute top-1/2 -translate-y-[50%] left-[23px]" />
+            </div>
+            {/* <SearchBar className="mt-2" onChange={handleSearch}/> */}
             <div className="pr-[30px] mt-1.5 mr-0.5 h-[292px] overflow-y-auto">
                 {
                     filterUser.length > 0

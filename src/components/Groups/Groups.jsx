@@ -129,14 +129,14 @@ const Groups = () => {
         })
     }
 
-    const handleCancelGroupReq = (group) => {
+    const handleCancelGroupReq = () => {
         remove(ref(db, 'groupRequests/'))
         console.log('cancel')
     }
 
     console.log(groupList)
     return (
-        <div className='pl-5 pr-[22px] pt-[17px] pb-[10px] rounded-[20px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] mt-[43px]'>
+        <div className='pl-5 pr-[22px] pt-[17px] pb-[10px] rounded-[20px] shadow-[0_4px_4px_rgba(0,0,0,0.25)]'>
             <Flex>
                 <h4 className="font-primary font-semibold text-xl">Groups List</h4>
                 {/* <BsThreeDotsVertical size={19} className="" /> */}
