@@ -39,7 +39,7 @@ const Groups = () => {
     }
 
     // this handler below is for creating groups.
-    const handleCreateBtn = (e) => {
+    const handleCreateBtn = () => {
         if (!groupNameInput) {
             setGroupNameErr('Please provide some characters to set your group name')
         }
@@ -93,15 +93,15 @@ const Groups = () => {
             console.log(snapshot.val())
             snapshot.forEach(item => {
                 const groupMemberItem = item.val();
-                if(groupMemberItem.memberId === data.uid)
-                arr.push(groupMemberItem.groupId)
+                if (groupMemberItem.memberId === data.uid)
+                    arr.push(groupMemberItem.groupId)
             })
             setGroupMembers(arr);
             console.log(groupMembers)
             console.log(groupMembers)
         });
     }, []);
-    
+
     useEffect(() => {
         const groupRequestsRef = ref(db, 'groupRequests/');
         onValue(groupRequestsRef, (snapshot) => {
@@ -170,9 +170,10 @@ const Groups = () => {
                     </div>
                     :
                     <div className="pr-[30px] mt-1.5 mr-0.5 h-[292px] overflow-y-auto">
+                        {/* GroupList logic below my favourite one */}
                         {
-                        groupList
-                        .filter(group => !groupMembers.includes(group.groupId))
+                            groupList
+                                .filter(group => !groupMembers.includes(group.groupId))
                                 .map((group, index) =>
                                     <Flex className={`pt-4 ${index === groupList.length - 1 ? '' : 'border-b-2 border-black/25 pb-[13px]'}`}>
                                         <Flex className='gap-3.5'>
