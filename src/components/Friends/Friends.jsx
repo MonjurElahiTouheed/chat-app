@@ -60,7 +60,6 @@ const Friends = ({ className, height_value }) => {
                 })
         })
 
-
         // probably wrong codes below
         // else {
         //     set(push(ref(db, 'blockList/')), {
