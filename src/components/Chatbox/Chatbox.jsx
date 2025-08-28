@@ -30,7 +30,7 @@ const Chatbox = () => {
             receiverName: currentUser.displayName === currentChatFriend.receiverName ? currentChatFriend.senderName : currentChatFriend.receiverName,
             message: message
         });
-        console.log('console')
+        console.log('console');
     }
 
     useEffect(() => {
@@ -75,6 +75,7 @@ const Chatbox = () => {
             {/* chatbox header ends*/}
 
             {/* chat conversation */}
+
             {
                 messageCollection.map(messageItem => <div className="flex-1">
                     <div className="px-[54px] mt-[56px]">
@@ -86,6 +87,7 @@ const Chatbox = () => {
                 </div>
                 )
             }
+            
             {/* chat conversation ends*/}
 
             <div className="px-7 py-[20px] rounded-b-[20px] shadow-[0_-1px_3px_rgba(0,0,0,0.25)] flex items-center gap-5">

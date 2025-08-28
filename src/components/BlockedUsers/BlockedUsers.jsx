@@ -13,6 +13,7 @@ const BlockedUsers = () => {
     const data = useSelector(state => state.userInfo.user.user);
     const [blockList, setBlockList] = useState([]);
 
+    // to fetch data from outside we use useEffect. useEffect code is below 👇
     useEffect(() => {
         const blockListRef = ref(db, 'blockList/');
         onValue(blockListRef, (snapshot) => {
