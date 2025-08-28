@@ -56,7 +56,7 @@ const Friends = ({ className, height_value }) => {
             remove(ref(db, "friends/" + user.userId))
                 .then(() => {
                     console.log(friendList)
-                    toast.error(` ${user.senderName} ওর সাথে কাট্টি 😐`);
+                    // toast.error(` ${user.senderName} ওর সাথে কাট্টি 😐`);
                 })
         })
 

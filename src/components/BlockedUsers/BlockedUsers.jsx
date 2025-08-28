@@ -20,9 +20,10 @@ const BlockedUsers = () => {
             const arr = [];
             console.log(snapshot.val())
             snapshot.forEach(item => {
-                if (data.uid === item.val().blockById) {
-                    arr.push({ ...item.val(), userId: item.key })
-                }
+                    if(data.uid === item.val().blockId){
+                        arr.push({ ...item.val(), userId: item.key })
+                    }
+                
             })
             setBlockList(arr);
             console.log(blockList)
@@ -33,7 +34,7 @@ const BlockedUsers = () => {
         remove(ref(db, "blockList/" + user.userId))
                             .then(() => {
                                 console.log(blockList)
-                                toast.error(` ${user.senderName} ওর সাথে কাট্টি 😐`);
+                                // toast.error(` ${user.senderName} ওর সাথে কাট্টি 😐`);
                             })
     }
 
@@ -54,7 +55,7 @@ const BlockedUsers = () => {
                                 </div>
                                 <div>
                                     <h6 className="font-primary text-sm font-semibold">{
-                                        user?.blockName
+                                        user?.blockByName
                                         }</h6>
                                     <p className="font-primary text-[10px] font-medium text-[rgba(77,77,77,0.50)] mt-0.5">{user?.last_replay_time}</p>
                                 </div>
