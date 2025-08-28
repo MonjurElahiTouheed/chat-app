@@ -20,12 +20,10 @@ const Users = () => {
 
     const data = useSelector(state => state.userInfo.user.user)
     const handleSearch = e => {
-        
         let arr = [];
         if(e.target.value.length == 0){
             setFilterUser([]);
         }
-
         else {
             userList.filter(item => {
                 if (item.username.toLowerCase().includes(e.target.value.toLowerCase())){
@@ -39,79 +37,51 @@ const Users = () => {
     useEffect(() => {
         const userRef = ref(db, 'users/');
         onValue(userRef, (snapshot) => {
-
             const arr = [];
             snapshot.forEach(item => {
-                console.log(item.key, 'item-keys')
-                console.log(item.val());
                 if (data.uid !== item.key) {
-                    arr.push({ ...item.val(), userId: item.key })
+                    arr.push({ ...item.val(), userId: item.key });
                 }
             })
-            console.log(arr)
-            setUserList(arr)
+            setUserList(arr);
         });
     }, [])
-    console.log(userList);
 
     useEffect(() => {
         const friendReqRef = ref(db, 'friendRequests/');
         onValue(friendReqRef, (snapshot) => {
             const arr = [];
-            console.log(snapshot)
             snapshot.forEach(item => {
-                console.log(item.val());
-                arr.push(item.val().receiverId + item.val().senderId)
-                console.log(item.val().receiverId)
-                console.log(item.val().senderId)
+                arr.push(item.val().receiverId + item.val().senderId);
             })
-            console.log(arr)
             setfriendReqList(arr)
-            console.log(friendReqList);
         });
-        console.log(friendReqList);
     }, [])
 
     useEffect(() => {
         const friendRef = ref(db, 'friends/');
         onValue(friendRef, (snapshot) => {
             const arr = [];
-            console.log(snapshot)
             snapshot.forEach(item => {
-                console.log(item.val());
-                arr.push(item.val().receiverId + item.val().senderId)
-                console.log(item.val().receiverId)
-                console.log(item.val().senderId)
+                arr.push(item.val().receiverId + item.val().senderId);
             })
-            console.log(arr)
-            setfriendList(arr)
-            console.log(friendReqList);
+            setfriendList(arr);
         });
-        console.log(friendList);
     }, [])
 
     useEffect(() => {
         const blockRef = ref(db, 'blockList/');
         onValue(blockRef, (snapshot) => {
             const arr = [];
-            console.log(snapshot)
             snapshot.forEach(item => {
-                console.log(item.val());
-                arr.push(item.val().receiverId + item.val().senderId)
-                console.log(item.val().receiverId)
-                console.log(item.val().senderId)
+                arr.push(item.val().blockById + item.val().blockId);
             })
-            console.log(arr)
-            setBlockList(arr)
-            console.log(blockList);
+            setBlockList(arr);
         });
-        console.log(blockList);
     }, [])
 
+console.log(blockList);
     const handleFrndReq = (user) => {
-        console.log(user);
-        console.log(user.friendId);
-        console.log(user.userId);
         set(push(ref(db, 'friendRequests/')), {
             senderId: data.uid,
             senderName: data.displayName,
@@ -119,15 +89,15 @@ const Users = () => {
             receiverName: user.username
         });
     }
-
-    const handleCancelReq = (user, index) => {
-        set(ref(db, 'frinedRequests/' + user.userId + data.uid), {
-            senderId: data.uid,
-            senderName: data.displayName,
-            receiverId: null,
-            receiverName: user.username
-        });
-    }
+    // to be coded...
+    // const handleCancelReq = (user, index) => {
+    //     set(ref(db, 'frinedRequests/' + user.userId + data.uid), {
+    //         senderId: data.uid,
+    //         senderName: data.displayName,
+    //         receiverId: null,
+    //         receiverName: user.username
+    //     });
+    // }
 
 
     return (
@@ -211,7 +181,6 @@ const Users = () => {
                             <div className="pr-[30px]">
                                 { blockList.includes(data.uid + user.userId) || blockList.includes(user.userId + data.uid)
                                         ?
-                                        
                                         <MovingComponent
                                             type="jelly"
                                             duration="1000ms"

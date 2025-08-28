@@ -23,7 +23,6 @@ const BlockedUsers = () => {
                     if(data.uid === item.val().blockId){
                         arr.push({ ...item.val(), userId: item.key })
                     }
-                
             })
             setBlockList(arr);
             console.log(blockList)
